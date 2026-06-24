@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BUS922 A3 · Evidence landscape</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f5f1;--paper:#fbfaf6;--ink:#1c1c1a;--ink-2:#3b3a36;--muted:#7a7872;--muted-2:#9a9890;
+    --line:#d8d4ca;--line-2:#bdb8aa;
+    --grey:#5F5E5A;--grey-fill:#F1EFE8;
+    --teal:#0F6E56;--teal-fill:#E1F5EE;--teal-fill-2:#EFF8F4;
+    --coral:#993C1D;--coral-fill:#FAECE7;
+    --green:#0F6E56;--amber:#9A6A1E;--amber-fill:#F6EEDC;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-feature-settings:"ss01","cv11";-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1120px;margin:0 auto;padding:56px 32px 220px;}
+  .back{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:11px;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:30px;}
+  .back:hover{color:var(--ink);}
+  .eyebrow{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:11px;
+    text-transform:uppercase;letter-spacing:0.16em;color:var(--grey);}
+  h1{font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:34px;line-height:1.12;
+    letter-spacing:-0.015em;margin:14px 0 0;text-wrap:balance;}
+  .lede{color:var(--muted);font-size:14.5px;line-height:1.65;max-width:74ch;margin:16px 0 0;}
+
+  /* control bar */
+  .bar{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:26px 0 0;
+    padding:14px 18px;background:var(--paper);border:1px solid var(--line);border-radius:12px;}
+  .gate{display:flex;align-items:baseline;gap:8px;}
+  .gate .n{font-family:"Fraunces",Georgia,serif;font-size:30px;color:var(--green);line-height:1;}
+  .gate .lab{font-size:12px;color:var(--ink-2);line-height:1.4;max-width:30ch;}
+  .gate .lab b{color:var(--ink);}
+  .spacer{flex:1;min-width:10px;}
+  .toggle{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.03em;
+    border:1px solid var(--line-2);background:#fff;color:var(--ink-2);border-radius:8px;
+    padding:8px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center;transition:.15s;}
+  .toggle:hover{border-color:var(--green);}
+  .toggle.on{background:var(--teal-fill);border-color:var(--green);color:var(--green);}
+  .toggle .dot{width:9px;height:9px;border-radius:50%;border:1.5px solid currentColor;}
+  .toggle.on .dot{background:var(--green);border-color:var(--green);}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);align-items:center;}
+  .legend .it{display:inline-flex;gap:6px;align-items:center;}
+  .sw{width:12px;height:12px;border-radius:3px;}
+
+  section.band{margin-top:14px;}
+  .blab{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:0.12em;
+    text-transform:uppercase;color:var(--muted);margin:24px 0 10px;display:flex;gap:10px;align-items:center;}
+  .blab .reg{padding:2px 8px;border-radius:5px;font-size:9px;}
+  .blab .reg.problem{background:var(--grey-fill);color:var(--grey);}
+  .blab .reg.design{background:var(--teal-fill);color:var(--teal);}
+
+  /* instrument funnel */
+  .funnel{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .inst{background:var(--grey-fill);border:1px solid var(--grey);border-radius:10px;padding:14px 16px;}
+  .inst h4{font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:17px;margin:0;color:#2C2C2A;}
+  .inst .ph{font-size:12px;color:var(--grey);margin:3px 0 10px;}
+  .greysrc{display:flex;gap:6px;flex-wrap:wrap;}
+  .gchip{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.02em;
+    background:#fff;border:1px solid var(--line-2);color:var(--grey);border-radius:5px;padding:3px 7px;}
+
+  .funnel-tick{display:flex;justify-content:center;color:var(--muted-2);font-size:18px;margin:8px 0 2px;}
+
+  /* node chips */
+  .nodes{display:flex;gap:9px;flex-wrap:wrap;}
+  .node{display:inline-flex;align-items:center;gap:8px;border-radius:8px;padding:8px 12px;
+    border:1px solid var(--line-2);background:#fff;cursor:pointer;transition:.14s;font-size:12.5px;
+    color:var(--ink-2);text-align:left;font-family:inherit;}
+  .node:hover,.node.active{transform:translateY(-1px);box-shadow:0 8px 20px -14px rgba(0,0,0,.4);}
+  .node .rank{width:9px;height:9px;border-radius:50%;flex:none;}
+  .node.green{border-color:rgba(15,110,86,.45);}
+  .node.green .rank{background:var(--green);}
+  .node.green.active{border-color:var(--green);background:var(--teal-fill-2);}
+  .node.amber .rank{background:var(--amber);}
+  .node.amber{border-color:rgba(154,106,30,.4);}
+  .node.amber.active{border-color:var(--amber);background:var(--amber-fill);}
+  .node .yr{color:var(--muted);font-variant-numeric:tabular-nums;}
+  .node.dim{opacity:.28;filter:grayscale(.4);}
+
+  /* DP rows */
+  .dprow{background:var(--teal-fill-2);border:1px solid var(--teal);border-radius:12px;
+    padding:15px 18px;margin-top:10px;}
+  .dprow.headline{border-width:2px;background:var(--teal-fill);}
+  .dphead{display:flex;align-items:center;gap:12px;margin-bottom:11px;flex-wrap:wrap;}
+  .dphead .num{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--teal);font-weight:500;letter-spacing:0.04em;}
+  .dphead h3{font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:18px;margin:0;color:#04342C;}
+  .dphead .badge{background:var(--coral);color:#fff;border-radius:4px;padding:2px 7px;
+    font-family:"JetBrains Mono",monospace;font-size:8.5px;letter-spacing:0.08em;}
+  .dphead .cnt{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--muted);margin-left:auto;}
+
+  /* hinge */
+  .hinge{margin-top:14px;background:var(--coral-fill);border:1.4px solid var(--coral);border-radius:13px;
+    padding:22px 26px;position:relative;}
+  .hinge .tag{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.1em;
+    text-transform:uppercase;color:var(--coral);}
+  .hinge .chip{display:inline-block;margin:8px 0 0;font-family:"JetBrains Mono",monospace;font-size:11px;
+    background:#fff;border:1px solid var(--coral);color:#712B13;border-radius:7px;padding:5px 11px;}
+  .hinge .gap{font-family:"Fraunces",Georgia,serif;font-size:21px;line-height:1.42;color:#4A1B0C;
+    margin:14px 0 0;max-width:70ch;text-wrap:pretty;}
+  .hinge .gap em{font-style:italic;color:var(--coral);}
+  .hinge .note{font-size:12px;color:#712B13;opacity:.8;margin:12px 0 0;max-width:64ch;font-style:italic;}
+
+  /* dashed band */
+  .oos{margin-top:14px;border:1px dashed var(--line-2);border-radius:12px;padding:16px 18px;
+    background:repeating-linear-gradient(135deg,transparent,transparent 9px,rgba(0,0,0,0.013) 9px,rgba(0,0,0,0.013) 18px);}
+  .oos .h{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--muted-2);margin-bottom:10px;}
+  .oos .intro{font-size:12.5px;line-height:1.6;color:var(--muted);max-width:78ch;margin:0 0 16px;}
+  .oosgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .oosdp{background:rgba(251,250,246,.55);border:1px dashed var(--line-2);border-radius:11px;padding:16px 18px;}
+  .oosdp .dp{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--muted-2);}
+  .oosdp h3{font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:18px;margin:6px 0 0;color:var(--ink);line-height:1.18;}
+  .oosdp .prin{font-size:12.5px;line-height:1.55;color:var(--ink-2);margin:9px 0 0;}
+  .oosdp .app,.oosdp .why{font-size:11.5px;line-height:1.5;margin:10px 0 0;padding-top:9px;border-top:1px solid var(--line);}
+  .oosdp .app{color:var(--muted);}
+  .oosdp .why{color:#712B13;}
+  .oosdp .app b,.oosdp .why b{font-family:"JetBrains Mono",monospace;font-size:8.5px;letter-spacing:0.1em;
+    text-transform:uppercase;display:block;margin-bottom:3px;font-weight:500;}
+  .oosdp .app b{color:var(--muted-2);}
+  .oosdp .why b{color:var(--coral);}
+  .oosdp .nodes{margin-top:12px;}
+  .node.oos-n{border-style:dashed;background:var(--grey-fill);}
+  .node.oos-n .rank{background:var(--muted-2);}
+  @media (max-width:720px){.oosgrid{grid-template-columns:1fr;}}
+
+  /* detail panel */
+  .panel{position:fixed;left:0;right:0;bottom:0;background:rgba(251,250,246,.97);
+    border-top:1px solid var(--line);backdrop-filter:blur(8px);z-index:50;
+    box-shadow:0 -12px 30px -22px rgba(0,0,0,.4);}
+  .panel-in{max-width:1120px;margin:0 auto;padding:16px 32px 18px;display:flex;gap:24px;align-items:flex-start;}
+  .panel .meta{flex:none;width:150px;}
+  .panel .rankchip{display:inline-flex;gap:7px;align-items:center;font-family:"JetBrains Mono",monospace;
+    font-size:11px;border-radius:7px;padding:6px 10px;border:1px solid;}
+  .panel .rankchip.green{color:var(--green);border-color:rgba(15,110,86,.4);background:var(--teal-fill-2);}
+  .panel .rankchip.amber{color:var(--amber);border-color:rgba(154,106,30,.4);background:var(--amber-fill);}
+  .panel .reglab{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--muted);margin-top:9px;}
+  .panel .body{flex:1;min-width:0;}
+  .panel .ttl{font-family:"Fraunces",Georgia,serif;font-size:16px;line-height:1.3;color:var(--ink);margin:0;}
+  .panel .role{font-size:12.5px;color:var(--ink-2);line-height:1.55;margin:7px 0 0;}
+  .panel .role b{color:var(--teal);}
+  .panel .hint{color:var(--muted-2);font-size:12.5px;font-style:italic;}
+  @media (max-width:720px){
+    .panel-in{flex-direction:column;gap:10px;padding:14px 20px;}
+    .panel .meta{display:flex;gap:12px;width:auto;align-items:center;}
+    .funnel{grid-template-columns:1fr;}
+  }
+  @media print{.panel{position:static;background:none;box-shadow:none;border-top:1px solid var(--line);}
+    html,body{background:#fff;} .back,.toggle{display:none;} .node.dim{opacity:1;filter:none;}
+    .wrap{padding-bottom:40px;}}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="index.html">&larr; Index</a>
+    <div class="eyebrow">BUS922 A3 · The territory</div>
+    <h1>The evidence landscape</h1>
+    <p class="lede">Two evidence registers on one canvas, joined at a single hinge. The <b>problem register</b> (grey / industry sources) characterises the problem; the <b>design register</b> (journal-warranted literature) warrants the design. Every selected paper is a node — click any one for its rank and role. The quality gate is countable on screen.</p>
+
+    <div class="bar">
+      <div class="gate">
+        <span class="n" id="gateN">18</span>
+        <span class="lab"><b>journal articles clear the gate</b> — ABDC A*/A or SCImago Q1 — above the 12+ aim and the ≥10 floor.</span>
+      </div>
+      <div class="spacer"></div>
+      <button class="toggle" id="gateToggle"><span class="dot"></span>Highlight gate-clearing only</button>
+      <div class="legend">
+        <span class="it"><span class="sw" style="background:var(--green)"></span>clears the gate</span>
+        <span class="it"><span class="sw" style="background:var(--amber)"></span>book / chapter / pending</span>
+        <span class="it"><span class="sw" style="background:var(--grey-fill);border:1px solid var(--grey)"></span>grey source</span>
+      </div>
+    </div>
+
+    <!-- PROBLEM REGISTER -->
+    <section class="band">
+      <div class="blab"><span class="reg problem">Problem register</span> the funnel — grey / industry sources characterise the problem</div>
+      <div class="funnel">
+        <div class="inst"><h4>PESTEL</h4><div class="ph">macro context</div>
+          <div class="greysrc"><span class="gchip">IBISWorld</span><span class="gchip">ABS</span></div></div>
+        <div class="inst"><h4>Five Forces</h4><div class="ph">industry context</div>
+          <div class="greysrc"><span class="gchip">IBISWorld</span><span class="gchip">industry reports</span></div></div>
+        <div class="inst"><h4>VRIO</h4><div class="ph">firm · the missing &ldquo;O&rdquo;</div>
+          <div class="greysrc"><span class="gchip">Partner docs</span><span class="gchip">Jobs &amp; Skills AU</span></div></div>
+      </div>
+      <div class="blab" style="margin-top:18px">Academic warrant for the gap — serial-acquisition / deliberate-codification stream</div>
+      <div class="nodes" id="problemNodes"></div>
+    </section>
+
+    <div class="funnel-tick">&darr;</div>
+
+    <!-- HINGE -->
+    <div class="hinge">
+      <div class="tag">TOWS synthesis — the hinge · where problem register meets design register</div>
+      <span class="chip">W&times;O: learning not retained &times; GenAI-structured by-product</span>
+      <p class="gap">&ldquo;Articulating an operational problem could deepen a learner's capability and produce a reusable artefact at once — <em>but in an acquired workforce, the two aren't yet designed as a single act.</em>&rdquo;</p>
+      <p class="note">The proposition the study investigates — a claim about <em>form</em> (not yet designed as one act), not about the partner's data. Both legs: capability <em>and</em> artefact.</p>
+    </div>
+
+    <div class="funnel-tick">&darr;</div>
+
+    <!-- DESIGN REGISTER -->
+    <div class="blab"><span class="reg design">Design register</span> the pipeline — journal-warranted literature warrants the design</div>
+    <div id="designRows"></div>
+
+    <!-- POST-A3 -->
+    <div class="oos">
+      <div class="h">Out of scope · post-A3 · informing-not-formal (EDGI902 precedent)</div>
+      <p class="intro">DP5 and DP6 complete the design's full intent but sit just outside this study's bounded slice. They're named and warranted here so the convenor can see the fuller direction &mdash; while the boundary stays explicit: each is shown as <em>informing-not-formal</em> direction, not assessed work.</p>
+      <div class="oosgrid" id="oosGrid"></div>
+    </div>
+
+    <!-- CRITICAL ENGAGEMENT -->
+    <div class="blab" style="margin-top:22px">Critical engagement — imported-warrant survival (theoretical-framework positioning)</div>
+    <div class="nodes" id="critNodes"></div>
+  </div>
+
+  <!-- detail panel -->
+  <div class="panel">
+    <div class="panel-in">
+      <div class="meta" id="pMeta">
+        <span class="rankchip amber">hover a node</span>
+      </div>
+      <div class="body" id="pBody">
+        <p class="ttl">Click or hover any node to inspect it</p>
+        <p class="hint">Each node carries its verified rank (ABDC / SCImago), its evidence register, and the role it plays in the slice.</p>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* node data: rank green=clears gate, amber=book/chapter/pending; reg=register */
+const PROBLEM = [
+  {a:"Zollo & Singh",y:2004,rank:"green",rankT:"ABDC A* · FT50",reg:"Problem warrant",ttl:"Deliberate learning in corporate acquisitions (Strategic Management Journal)",role:"The empirical anchor of the whole problem — and the direct warrant for the headline. Codification, not experience, drives integration performance across 228 mergers. <b>Warrants DP3.</b>"},
+  {a:"Haleblian & Finkelstein",y:1999,rank:"green",rankT:"ABDC A* · FT50",reg:"Problem grounding",ttl:"Organizational acquisition experience and performance (Administrative Science Quarterly)",role:"A U-shaped experience–performance curve: more deals ≠ better integration. Sharpens the gap Zollo & Singh open."},
+  {a:"Schweizer et al.",y:2022,rank:"green",rankT:"ABDC A*",reg:"Problem grounding",ttl:"Serial M&A capability: a meta-analytic review (Int. Journal of Management Reviews)",role:"Recent meta-analytic confirmation that deliberate-learning investment beats experience accumulation — the gap is still live."},
+  {a:"Trichterborn et al.",y:2016,rank:"green",rankT:"ABDC A* · FT50",reg:"Problem → design bridge",ttl:"How to improve acquisition performance (Strategic Management Journal)",role:"A four-part learning process (articulation → codification → sharing → internalisation). Its front-end <b>is</b> what DP2+DP3 perform."},
+  {a:"Colman et al.",y:2022,rank:"green",rankT:"ABDC A* · FT50",reg:"Problem grounding",ttl:"Navigating the social minefield of M&A (Journal of Management Studies)",role:"Relational dynamics are the fabric of integration capability; overlapping integrations impair it — the compounding strain of serial acquisition."},
+  {a:"Maynard",y:2020,rank:"amber",rankT:"Book — not gate-eligible",reg:"Context framing",ttl:"Book-length futures-thinking treatment (Pippard's Ladder)",role:"Cumulative-strain framing: systems look stable, then tip non-linearly. Business-context colour for the 'why preventive' argument — not a gate reference."},
+];
+const DP = [
+  {num:"DP1 · raw material",h:"Authentic operational problems",headline:false,nodes:[
+    {a:"Perusso & Baaken",y:2022,rank:"green",rankT:"SCImago Q1 (Education)",reg:"Design · DP1",ttl:"Beyond the case method in business education (Int. Journal of Management Education)",role:"Business problem-based learning with execution — the closest disciplinary match; carries DP1 into the business genre."},
+    {a:"Herrington et al.",y:2013,rank:"amber",rankT:"Book chapter",reg:"Design · DP1",ttl:"Authentic Learning Environments",role:"Situated-cognition mechanism: authentic tasks produce transferable knowledge. The 'why authenticity' beneath DP1."},
+    {a:"Knowles",y:1975,rank:"amber",rankT:"Book",reg:"Design · DP1",ttl:"Self-Directed Learning",role:"Andragogy as a design heuristic — where it enters the framework. Cited as orientation, not predictive theory."},
+    {a:"Lakkala et al.",y:2023,rank:"amber",rankT:"SCImago — pending confirm",reg:"Design · DP1",ttl:"Int. Journal for the Scholarship of Teaching & Learning",role:"Learners value authentic tasks that produce outputs for further use — corroborates the by-product thesis at the raw-material level."},
+  ]},
+  {num:"DP2 · generation",h:"Generative articulation",headline:false,nodes:[
+    {a:"Bisra et al.",y:2018,rank:"green",rankT:"SCImago Q1",reg:"Design · DP2",ttl:"Inducing self-explanation: a meta-analysis (Educational Psychology Review)",role:"The effect-size spine (g = .55) and the case for computer-generated prompts — directly relevant to a GenAI template."},
+    {a:"Fiorella & Mayer",y:2016,rank:"green",rankT:"SCImago Q1",reg:"Design · DP2",ttl:"Eight ways to promote generative learning (Educational Psychology Review)",role:"The generative-mode mechanism: generation is simultaneously the learning and the artefact — the dual-output logic."},
+    {a:"Bangert-Drowns et al.",y:2004,rank:"green",rankT:"SCImago Q1",reg:"Design · DP2",ttl:"Writing-to-learn meta-analysis (Review of Educational Research)",role:"Metacognitive prompts raise gains; long assignments lower them. Justifies short, prompted artefacts — the inviolable boundary."},
+    {a:"Lim",y:2025,rank:"amber",rankT:"Journal to source — pending",reg:"Design · DP2",ttl:"Structured reflective writing in a manufacturing organisation",role:"The closest-to-partner workplace anchor: structured reflection with adult learners, Kirkpatrick L2/L3 gains."},
+    {a:"Schön",y:1987,rank:"amber",rankT:"Book",reg:"Design · DP2",ttl:"Educating the Reflective Practitioner",role:"The primary professional-learning frame: reflection-in/on-action as the register practitioners articulate experience in."},
+    {a:"Boud et al.",y:2006,rank:"amber",rankT:"Book",reg:"Design · DP2",ttl:"Productive Reflection at Work",role:"Co-frame (kept light): reflection that yields learning and changed practice together."},
+  ]},
+  {num:"DP3 · the template",h:"Structuring lives in the template",headline:true,nodes:[
+    {a:"van Merriënboer & Sweller",y:2010,rank:"green",rankT:"SCImago Q1",reg:"Design · DP3",ttl:"Cognitive load theory in health professional education (Medical Education)",role:"CLT guidelines: worked examples cut extraneous load while self-explanation optimises germane load — basis for template-plus-generation."},
+    {a:"Tetzlaff et al.",y:2025,rank:"green",rankT:"SCImago Q1",reg:"Design · DP3",ttl:"Expertise-reversal meta-analysis (Learning and Instruction)",role:"176 effects: high assistance helps novices, hinders experts — asymmetrically. The evidence the template must fade, and that erring toward support is safe."},
+    {a:"Salden et al.",y:2010,rank:"green",rankT:"SCImago Q1",reg:"Design · DP3",ttl:"Adaptive vs fixed fading of worked examples (Instructional Science)",role:"Adaptive fading beats fixed beats problem-solving — the implementable 'how' a GenAI template operationalises."},
+    {a:"Nievelstein et al.",y:2013,rank:"green",rankT:"SCImago Q1",reg:"Design · DP3",ttl:"Worked examples in legal reasoning (Contemporary Educational Psychology)",role:"No expertise-reversal in ill-structured domains — the partner's problems are ill-structured, so the template stays useful longer."},
+    {a:"van Merriënboer & Boot",y:2008,rank:"amber",rankT:"Book chapter",reg:"Design · DP3 / DP4",ttl:"A holistic pedagogical view of learning objects (Ch. 4)",role:"The conceptual spine: templates-not-instantiations, intermediate-not-final. The mechanism for relocating structuring off the learner — the headline claim."},
+  ]},
+  {num:"DP4 · the output",h:"Context-rich intermediate",headline:false,nodes:[
+    {a:"Markus",y:2001,rank:"green",rankT:"ABDC A*",reg:"Design · DP4",ttl:"Toward a theory of knowledge reuse (Journal of MIS)",role:"The backbone of 'reuse-prep downstream': producers rarely repurpose their own output; repositories need rework. The Learn→Share seam."},
+    {a:"Rivière et al.",y:2019,rank:"green",rankT:"SCImago Q1",reg:"Design · DP4",ttl:"Contextualise–decontextualise–recontextualise (Academic Medicine)",role:"Abstraction belongs downstream, not at capture — the learning-theory leg for keeping the intermediate context-rich."},
+    {a:"Szulanski",y:2000,rank:"green",rankT:"ABDC A* · FT50",reg:"Design · DP4",ttl:"The process of knowledge transfer: stickiness (OBHDP)",role:"Canonical 'stickiness' model — the transfer risk DP4's downstream-rework stance is built to manage."},
+    {a:"Lobato",y:2006,rank:"green",rankT:"SCImago Q1",reg:"Design · DP4",ttl:"Alternative perspectives on the transfer of learning (Journal of the Learning Sciences)",role:"The situated critique naming the 'fallacy of decontextualisation' — reinforces DP4's resistance to stripping context."},
+    {a:"Kasper et al.",y:2010,rank:"green",rankT:"ABDC A",reg:"Design · DP4",ttl:"Knowledge 'thinning' (Journal of Management Inquiry)",role:"'Thinning' names exactly the loss DP4 guards against — the context is the strategic asset."},
+  ]},
+];
+const OOS = [
+  {a:"Connelly et al.",y:2011,rank:"amber",rankT:"ABDC A* — landscape-informing",reg:"DP5 · post-A3",ttl:"Learner-controlled disclosure as trust mechanism",role:"DP5 — reflect-for-self then select-for-sharing. Answers the partner's belonging/culture brief bullet. Out of scope; lands here as informing-not-formal."},
+  {a:"Petronio",y:2010,rank:"amber",rankT:"Landscape-informing",reg:"DP5 · post-A3",ttl:"Communication privacy management",role:"DP5 anchor — learner-controlled disclosure as a protective + generative trust mechanism."},
+  {a:"Frazier et al.",y:2017,rank:"amber",rankT:"ABDC A* — landscape-informing",reg:"DP5 · post-A3",ttl:"Psychological safety",role:"DP5 — safe contribution is how newly-acquired, cross-cultural staff build early belonging."},
+  {a:"King-Sears et al.",y:2023,rank:"amber",rankT:"Landscape-informing",reg:"DP6 · post-A3",ttl:"Universal Design for Learning",role:"DP6 — multiple means of expression; UDL as the equity frame, generative learning as the effect."},
+  {a:"Epstein et al.",y:2020,rank:"amber",rankT:"Landscape-informing",reg:"DP6 · post-A3",ttl:"Multimodal expression",role:"DP6 — lets the most tacit operational know-how surface in non-text form where prose would lose it."},
+  {a:"Zhang / Capp",y:2024,rank:"amber",rankT:"Landscape-informing",reg:"DP6 · post-A3",ttl:"UDL critiques (Zhang 2024; Capp 2017)",role:"DP6 — the critical counterweight to UDL claims; travels with DP6 on the landscape."},
+];
+const CRIT = [
+  {a:"Gourlay",y:2003,rank:"amber",rankT:"Conference paper — positioning",reg:"Positioning",ttl:"The SECI model: a critique",role:"The critique that bites the SECI spiral. Cited to show the framework relies on <b>externalisation only</b>, not the whole spiral."},
+  {a:"Farnese et al.",y:2019,rank:"amber",rankT:"SCImago — confirm",reg:"Positioning",ttl:"Validating the SECI model / KMSP-Q (Frontiers in Psychology)",role:"A validated instrument across ~840 employees — fills Gourlay's gap; shows externalisation is robust and measurable. The rebuttal that lets the narrow citation stand."},
+  {a:"Taylor & Kroth",y:2009,rank:"amber",rankT:"Not Scopus-ranked — positioning",reg:"Positioning",ttl:"Andragogy's transition into the future (Journal of Adult Education)",role:"Argues andragogy isn't a science — grounds citing andragogy as a design heuristic, not a predictive theory."},
+];
+
+const pMeta=document.getElementById('pMeta'), pBody=document.getElementById('pBody');
+function show(n){
+  pMeta.innerHTML='<span class="rankchip '+n.rank+'"><span style="width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block"></span>'+n.rankT+'</span><div class="reglab">'+n.reg+'</div>';
+  pBody.innerHTML='<p class="ttl">'+n.a+' ('+n.y+') — '+n.ttl+'</p><p class="role">'+n.role+'</p>';
+}
+function mkNode(n,extra){
+  const b=document.createElement('button');
+  b.className='node '+n.rank+(extra||'');
+  b.innerHTML='<span class="rank"></span><span>'+n.a+' <span class="yr">'+n.y+'</span></span>';
+  b.addEventListener('mouseenter',()=>{setActive(b);show(n);});
+  b.addEventListener('click',()=>{setActive(b);show(n);});
+  b.addEventListener('focus',()=>{setActive(b);show(n);});
+  b._rank=n.rank;
+  return b;
+}
+let activeEl=null;
+function setActive(el){if(activeEl)activeEl.classList.remove('active');activeEl=el;el.classList.add('active');}
+
+const allNodes=[];
+function fill(id,arr,extra){const c=document.getElementById(id);arr.forEach(n=>{const el=mkNode(n,extra);allNodes.push(el);c.appendChild(el);});}
+fill('problemNodes',PROBLEM,'');
+fill('critNodes',CRIT,'');
+
+/* DP5 / DP6 articulated blocks */
+const DP56=[
+  {dp:"DP5 · post-A3 · landscape-informing", h:"Learner-controlled disclosure as a trust mechanism",
+   prin:"Reflect-for-self first, then select-for-sharing &mdash; the learner controls what becomes visible. Disclosure is treated as a protective <em>and</em> generative act, not an automatic publish.",
+   app:["For the partner","Safe contribution is how newly-acquired, cross-cultural staff build early belonging &mdash; the partner's culture-brief bullet."],
+   why:["Why deferred","Trust and disclosure open their own evidentiary stream. The formal slice stops at <em>capture</em>, before the sharing decision &mdash; so DP5 informs the direction without widening the bounded act."],
+   tag:"DP5"},
+  {dp:"DP6 · post-A3 · landscape-informing", h:"Multiple means of expression, no single channel privileged",
+   prin:"Let learners articulate in their strongest mode &mdash; text, voice, diagram. UDL is the equity frame; generative learning is the effect.",
+   app:["For the partner","Lets the most tacit operational know-how surface in non-text form, where prose would lose it."],
+   why:["Why deferred","Modality multiplies the artefact and template design. The slice deliberately fixes one channel to isolate the generative mechanism (DP2&ndash;DP3); DP6 shows where it widens afterwards."],
+   tag:"DP6"},
+];
+const oosGrid=document.getElementById('oosGrid');
+DP56.forEach(d=>{
+  const box=document.createElement('div'); box.className='oosdp';
+  box.innerHTML='<div class="dp">'+d.dp+'</div><h3>'+d.h+'</h3><p class="prin">'+d.prin+'</p>'
+    +'<p class="app"><b>'+d.app[0]+'</b>'+d.app[1]+'</p>'
+    +'<p class="why"><b>'+d.why[0]+'</b>'+d.why[1]+'</p>';
+  const nd=document.createElement('div'); nd.className='nodes';
+  OOS.filter(n=>n.reg.indexOf(d.tag)===0).forEach(n=>{const el=mkNode(n,' oos-n');allNodes.push(el);nd.appendChild(el);});
+  box.appendChild(nd); oosGrid.appendChild(box);
+});
+
+const rowsC=document.getElementById('designRows');
+DP.forEach(dp=>{
+  const row=document.createElement('div');
+  row.className='dprow'+(dp.headline?' headline':'');
+  const green=dp.nodes.filter(x=>x.rank==='green').length;
+  const head=document.createElement('div');head.className='dphead';
+  head.innerHTML='<span class="num">'+dp.num+'</span><h3>'+dp.h+'</h3>'+(dp.headline?'<span class="badge">HEADLINE</span>':'')+'<span class="cnt">'+green+' clear the gate</span>';
+  row.appendChild(head);
+  const nd=document.createElement('div');nd.className='nodes';
+  dp.nodes.forEach(n=>{const el=mkNode(n,'');allNodes.push(el);nd.appendChild(el);});
+  row.appendChild(nd);rowsC.appendChild(row);
+});
+
+/* gate toggle */
+const tgl=document.getElementById('gateToggle');
+let on=false;
+tgl.addEventListener('click',()=>{
+  on=!on;tgl.classList.toggle('on',on);
+  allNodes.forEach(el=>el.classList.toggle('dim',on&&el._rank!=='green'));
+});
+</script>
+</body>
+</html>

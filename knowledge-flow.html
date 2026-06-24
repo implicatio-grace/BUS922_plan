@@ -1,0 +1,2301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Knowledge Flow — Industry Partner Concept v6 (artefact v2.1)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+/* =========================================================
+   Industry Partner — Concept Visualisation
+   Nautical-chart aesthetic, layered language register
+   ========================================================= */
+
+:root {
+  /* Palette — ink, parchment, sea-mist, marine, copper */
+  --ink:        #0E2A47;
+  --ink-2:      #133A5C;
+  --ink-soft:   #486581;
+  --paper:      #F2EADB;
+  --paper-2:    #EBE2D0;
+  --mist:       #DDD6C4;
+  --rule:       rgba(14, 42, 71, 0.18);
+  --rule-soft:  rgba(14, 42, 71, 0.10);
+  --marine:     #1F6F7B;
+  --marine-2:   #2B8A99;
+  --copper:     #B5613B;
+  --copper-2:   #C97A52;
+  --signal:     #C8A14B;
+  --teal-tint:  rgba(31, 111, 123, 0.12);
+  --copper-tint:rgba(181, 97, 59, 0.12);
+
+  --display: "Newsreader", "Spectral", Georgia, serif;
+  --body: "DM Sans", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv11";
+  overflow-x: hidden;
+}
+
+/* Chart-paper background — hairline grid + edge tick marks */
+.chart-paper {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(255,255,255,0.55), transparent 60%),
+    radial-gradient(ellipse 70% 60% at 90% 90%, rgba(181,97,59,0.04), transparent 60%),
+    linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+  position: relative;
+}
+
+.chart-paper::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right, var(--rule-soft) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--rule-soft) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse 100% 100% at 50% 40%, black 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 100% 100% at 50% 40%, black 60%, transparent 100%);
+}
+
+/* Faint paper noise */
+.chart-paper::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.05  0 0 0 0 0.16  0 0 0 0 0.28  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Typography */
+.display { font-family: var(--display); font-weight: 500; letter-spacing: -0.01em; }
+.mono { font-family: var(--mono); font-feature-settings: "ss01", "ss02"; }
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.coord {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+h1, h2, h3 { font-family: var(--display); font-weight: 500; letter-spacing: -0.015em; line-height: 1.08; margin: 0; }
+h1 { font-size: clamp(40px, 5.4vw, 76px); }
+h2 { font-size: clamp(26px, 2.6vw, 36px); }
+h3 { font-size: clamp(20px, 1.8vw, 26px); }
+
+p { margin: 0 0 0.75em; text-wrap: pretty; }
+a { color: inherit; }
+
+/* Layout shell */
+.shell { max-width: 1480px; margin: 0 auto; padding: 0 32px; position: relative; }
+.section { padding: 96px 0; position: relative; }
+.section + .section { border-top: 1px solid var(--rule-soft); }
+
+/* Crosshair / compass corner ornaments */
+.frame-cross {
+  position: absolute;
+  width: 14px; height: 14px;
+  border: 1px solid var(--ink);
+  opacity: 0.65;
+}
+.frame-cross::before, .frame-cross::after {
+  content: ""; position: absolute; background: var(--ink); opacity: 0.65;
+}
+.frame-cross::before { left: 50%; top: -4px; bottom: -4px; width: 1px; transform: translateX(-50%); }
+.frame-cross::after  { top: 50%; left: -4px; right: -4px; height: 1px; transform: translateY(-50%); }
+
+/* Buttons / chips */
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: rgba(255,255,255,0.35);
+  white-space: nowrap;
+}
+.chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--marine); }
+
+.btn {
+  appearance: none; border: 1px solid var(--ink); background: var(--paper);
+  color: var(--ink); font-family: var(--body); font-size: 13px; font-weight: 500;
+  padding: 9px 14px; border-radius: 4px; cursor: default;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: background 0.18s, color 0.18s;
+}
+.btn:hover { background: var(--ink); color: var(--paper); }
+.btn.ghost { background: transparent; }
+.btn.solid { background: var(--ink); color: var(--paper); }
+.btn.solid:hover { background: var(--ink-2); }
+
+/* Cards */
+.card {
+  background: rgba(255, 252, 245, 0.66);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 20px;
+  position: relative;
+}
+.card .corner {
+  position: absolute; width: 10px; height: 10px;
+  border: 1px solid var(--ink); opacity: 0.6;
+}
+.card .corner.tl { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.card .corner.tr { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+.card .corner.bl { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+.card .corner.br { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+/* Tag pill (the manifest tag) */
+.tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 11px;
+  padding: 3px 7px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: rgba(255,255,255,0.5);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.tag .swatch { width: 7px; height: 7px; border-radius: 1px; background: var(--marine); }
+
+/* Subtle dashed shipping-lane look */
+.lane-dash {
+  stroke-dasharray: 6 5;
+  animation: lane-march 22s linear infinite;
+}
+@keyframes lane-march {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -1000; }
+}
+.lane-dash.paused { animation-play-state: paused; }
+
+/* Cargo manifest icon that travels */
+.cargo {
+  filter: drop-shadow(0 1px 0 rgba(14, 42, 71, 0.18));
+}
+
+/* Station ring (hover/selected state) */
+.station-ring {
+  transition: stroke-width 0.2s, stroke-opacity 0.2s, transform 0.2s;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.station:hover .station-ring { stroke-width: 2.2; stroke-opacity: 1; }
+.station.selected .station-ring { stroke-width: 2.6; stroke-opacity: 1; }
+.station { cursor: default; }
+
+/* Bottom-up bracketed label */
+.bracket {
+  position: relative; padding: 0 12px;
+}
+.bracket::before, .bracket::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 8px;
+  border: 1px solid var(--ink-soft);
+}
+.bracket::before { left: 0; border-right: 0; }
+.bracket::after  { right: 0; border-left: 0; }
+
+/* Soft pulse for the highlighted artefact */
+@keyframes pulse-ring {
+  0%, 100% { opacity: 0.0; r: 14; }
+  50% { opacity: 0.4; r: 22; }
+}
+
+/* Hover lift */
+.lift { transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; }
+.lift:hover { transform: translateY(-2px); border-color: var(--ink); }
+
+/* Slider */
+input[type="range"].chart-slider {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; background: transparent;
+}
+input[type="range"].chart-slider::-webkit-slider-runnable-track {
+  height: 2px; background: var(--ink); opacity: 0.55;
+}
+input[type="range"].chart-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 16px; margin-top: -7px;
+  border-radius: 50%; background: var(--paper); border: 1.5px solid var(--ink);
+}
+input[type="range"].chart-slider::-moz-range-track { height: 2px; background: var(--ink); opacity: 0.55; }
+input[type="range"].chart-slider::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--paper); border: 1.5px solid var(--ink); }
+
+/* Tabs / register switch */
+.register-switch {
+  display: inline-flex; border: 1px solid var(--ink); border-radius: 4px; overflow: hidden;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.register-switch button {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  padding: 7px 12px; cursor: default; border-right: 1px solid var(--ink);
+}
+.register-switch button:last-child { border-right: 0; }
+.register-switch button.on { background: var(--ink); color: var(--paper); }
+
+/* Detail panel slide */
+.panel {
+  background: rgba(255,252,245,0.78);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 24px 28px;
+}
+
+/* Footer */
+.footer {
+  font-family: var(--mono); font-size: 10.5px; color: var(--ink-soft);
+  letter-spacing: 0.04em;
+  padding: 28px 0;
+  border-top: 1px solid var(--rule-soft);
+}
+
+/* Util */
+.flex { display: flex; }
+.col  { display: flex; flex-direction: column; }
+.between { justify-content: space-between; }
+.center  { align-items: center; }
+.gap-4 { gap: 4px; } .gap-6 { gap: 6px; } .gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; } .gap-16 { gap: 16px; } .gap-24 { gap: 24px; }
+.gap-32 { gap: 32px; }
+.wrap { flex-wrap: wrap; }
+.full { width: 100%; }
+.muted { color: var(--ink-soft); }
+.small { font-size: 12.5px; }
+.tiny { font-size: 11px; }
+
+/* Reveal animation for newly visible panels */
+@keyframes slide-down-fade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal { animation: slide-down-fade 0.28s ease-out; }
+
+/* Mini map grid for clusters */
+.clusters-grid {
+  display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;
+}
+.clusters-grid .node {
+  aspect-ratio: 1; border: 1px solid var(--rule); border-radius: 2px;
+  background: rgba(255,255,255,0.5);
+}
+.clusters-grid .node.active { background: var(--marine); border-color: var(--marine); }
+.clusters-grid .node.cluster { background: var(--copper); border-color: var(--copper); box-shadow: 0 0 0 2px var(--copper-tint); }
+
+/* Aesthetic variants */
+body.variant-editorial { --paper: #F6F2E8; --paper-2: #EFE9DA; }
+body.variant-editorial .chart-paper::before { background-size: 64px 64px; opacity: 0.7; }
+body.variant-contemporary {
+  --paper: #ECEEEF; --paper-2: #E1E5E7; --mist: #D4D9DB;
+  --ink: #0E141C; --ink-2: #1A2330; --ink-soft: #5C6773;
+  --marine: #0D8C8E; --copper: #C2492B;
+  --rule: rgba(14,20,28,0.16); --rule-soft: rgba(14,20,28,0.08);
+}
+body.variant-contemporary .chart-paper::after { opacity: 0.15; }
+body.variant-contemporary { font-family: "Inter Tight", var(--body); }
+
+/* Overlay tint */
+.overlay-tag {
+  font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
+  padding: 2px 6px; border-radius: 2px; border: 1px solid currentColor;
+}
+.overlay-seci    { color: var(--marine); }
+.overlay-maynard { color: var(--copper); }
+.overlay-roles   { color: var(--signal); }
+
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" data-presets="env,react">
+
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "palette": ["#D97757", "#29261b", "#f6f4ef"],
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        options={['#D97757', '#2A6FDB', '#1F8A5B', '#7A5AE0']}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakColor  label="Palette" value={t.palette}
+//                        options={[['#D97757', '#29261b', '#f6f4ef'],
+//                                  ['#475569', '#0f172a', '#f1f5f9']]}
+//                        onChange={(v) => setTweak('palette', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+
+  .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere}
+
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+
+  .twk-num{display:flex;align-items:center;box-sizing:border-box;min-width:0;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+
+  .twk-chips{display:flex;gap:6px}
+  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
+    padding:0;border:0;border-radius:6px;overflow:hidden;cursor:default;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
+    transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}
+  .twk-chip:hover{transform:translateY(-1px);
+    box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}
+  .twk-chip[data-on="1"]{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),
+    0 2px 6px rgba(0,0,0,.15)}
+  .twk-chip>span{position:absolute;top:0;bottom:0;right:0;width:34%;
+    display:flex;flex-direction:column;box-shadow:-1px 0 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i{flex:1;box-shadow:0 -1px 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i:first-child{box-shadow:none}
+  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    // Same-window signal so in-page listeners (deck-stage rail thumbnails)
+    // can react — the parent message only reaches the host, not peers.
+    window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function TweaksPanel({ title = 'Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" data-omelette-chrome=""
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">
+          {children}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({ label, children }) {
+  return (
+    <>
+      <div className="twk-sect">{label}</div>
+      {children}
+    </>
+  );
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  // Segments wrap mid-word once per-segment width runs out. The track is
+  // ~248px (280 panel − 28 body pad − 4 seg pad), each button loses 12px
+  // to its own padding, and 11.5px system-ui averages ~6.3px/char — so 2
+  // options fit ~16 chars each, 3 fit ~10. Past that (or >3 options), fall
+  // back to a dropdown rather than wrap.
+  const labelLen = (o) => String(typeof o === 'object' ? o.label : o).length;
+  const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const fitsAsSegments = maxLen <= ({ 2: 16, 3: 10 }[options.length] ?? 0);
+  if (!fitsAsSegments) {
+    // <select> emits strings — map back to the original option value so the
+    // fallback stays type-preserving (numbers, booleans) like the segment path.
+    const resolve = (s) => {
+      const m = options.find((o) => String(typeof o === 'object' ? o.value : o) === s);
+      return m === undefined ? s : typeof m === 'object' ? m.value : m;
+    };
+    return <TweakSelect label={label} value={value} options={options}
+                        onChange={(s) => onChange(resolve(s))} />;
+  }
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => {
+          const v = typeof o === 'object' ? o.value : o;
+          const l = typeof o === 'object' ? o.label : o;
+          return <option key={v} value={v}>{l}</option>;
+        })}
+      </select>
+    </TweakRow>
+  );
+}
+
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder}
+             onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+
+function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
+  const clamp = (n) => {
+    if (min != null && n < min) return min;
+    if (max != null && n > max) return max;
+    return n;
+  };
+  const startRef = React.useRef({ x: 0, val: 0 });
+  const onScrubStart = (e) => {
+    e.preventDefault();
+    startRef.current = { x: e.clientX, val: value };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = (ev) => {
+      const dx = ev.clientX - startRef.current.x;
+      const raw = startRef.current.val + dx * step;
+      const snapped = Math.round(raw / step) * step;
+      onChange(clamp(Number(snapped.toFixed(decimals))));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-num">
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <input type="number" value={value} min={min} max={max} step={step}
+             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
+      {unit && <span className="twk-num-unit">{unit}</span>}
+    </div>
+  );
+}
+
+// Relative-luminance contrast pick — checkmarks drawn over a swatch need to
+// read on both #111 and #fafafa without per-option configuration. Hex input
+// only (#rgb / #rrggbb); named or rgb()/hsl() colors fall through to "light".
+function __twkIsLight(hex) {
+  const h = String(hex).replace('#', '');
+  const x = h.length === 3 ? h.replace(/./g, (c) => c + c) : h.padEnd(6, '0');
+  const n = parseInt(x.slice(0, 6), 16);
+  if (Number.isNaN(n)) return true;
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return r * 299 + g * 587 + b * 114 > 148000;
+}
+
+const __TwkCheck = ({ light }) => (
+  <svg viewBox="0 0 14 14" aria-hidden="true">
+    <path d="M3 7.2 5.8 10 11 4.2" fill="none" strokeWidth="2.2"
+          strokeLinecap="round" strokeLinejoin="round"
+          stroke={light ? 'rgba(0,0,0,.78)' : '#fff'} />
+  </svg>
+);
+
+// TweakColor — curated color/palette picker. Each option is either a single
+// hex string or an array of 1-5 hex strings; the card adapts — a lone color
+// renders solid, a palette renders colors[0] as the hero (left ~2/3) with the
+// rest stacked in a sharp column on the right. onChange emits the
+// option in the shape it was passed (string stays string, array stays array).
+// Without options it falls back to the native color input for back-compat.
+function TweakColor({ label, value, options, onChange }) {
+  if (!options || !options.length) {
+    return (
+      <div className="twk-row twk-row-h">
+        <div className="twk-lbl"><span>{label}</span></div>
+        <input type="color" className="twk-swatch" value={value}
+               onChange={(e) => onChange(e.target.value)} />
+      </div>
+    );
+  }
+  // Native <input type=color> emits lowercase hex per the HTML spec, so
+  // compare case-insensitively. String() guards JSON.stringify(undefined),
+  // which returns the primitive undefined (no .toLowerCase).
+  const key = (o) => String(JSON.stringify(o)).toLowerCase();
+  const cur = key(value);
+  return (
+    <TweakRow label={label}>
+      <div className="twk-chips" role="radiogroup">
+        {options.map((o, i) => {
+          const colors = Array.isArray(o) ? o : [o];
+          const [hero, ...rest] = colors;
+          const sup = rest.slice(0, 4);
+          const on = key(o) === cur;
+          return (
+            <button key={i} type="button" className="twk-chip" role="radio"
+                    aria-checked={on} data-on={on ? '1' : '0'}
+                    aria-label={colors.join(', ')} title={colors.join(' · ')}
+                    style={{ background: hero }}
+                    onClick={() => onChange(o)}>
+              {sup.length > 0 && (
+                <span>
+                  {sup.map((c, j) => <i key={j} style={{ background: c }} />)}
+                </span>
+              )}
+              {on && <__TwkCheck light={__twkIsLight(hero)} />}
+            </button>
+          );
+        })}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakButton({ label, onClick, secondary = false }) {
+  return (
+    <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
+            onClick={onClick}>{label}</button>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
+  TweakText, TweakNumber, TweakColor, TweakButton,
+});
+
+  </script>
+
+  <script type="text/babel" data-presets="env,react">
+/* global React */
+// flow.jsx — hero shipping-lane flow diagram
+// One long horizontal canvas: arrival → Learn → Share → Innovate → impact → feedback arc
+
+const { useState, useEffect, useRef, useMemo } = React;
+
+// Path generator: a gentle horizontal lane with mild waves
+function lanePath(points) {
+  // Smooth curve through points using cardinal-like cubic
+  let d = `M ${points[0][0]} ${points[0][1]}`;
+  for (let i = 0; i < points.length - 1; i++) {
+    const [x0, y0] = points[i];
+    const [x1, y1] = points[i + 1];
+    const mx = (x0 + x1) / 2;
+    d += ` C ${mx} ${y0}, ${mx} ${y1}, ${x1} ${y1}`;
+  }
+  return d;
+}
+
+// Cargo manifest svg group — a small parchment/envelope with a tag dot
+function Cargo({ x, y, scale = 1, label = "ARTEFACT", color = "var(--marine)" }) {
+  return (
+    <g transform={`translate(${x - 14 * scale}, ${y - 10 * scale}) scale(${scale})`} className="cargo">
+      <rect x="0" y="0" width="28" height="20" rx="1.5" fill="#FBF6E9" stroke="var(--ink)" strokeWidth="1" />
+      <path d="M0 0 L14 10 L28 0" fill="none" stroke="var(--ink)" strokeWidth="0.8" />
+      <rect x="3" y="13" width="10" height="3" fill={color} opacity="0.85" />
+      <rect x="15" y="13" width="6" height="3" fill="var(--copper)" opacity="0.7" />
+      <circle cx="25" cy="3" r="2" fill={color} stroke="var(--ink)" strokeWidth="0.6" />
+    </g>
+  );
+}
+
+// Compass rose
+function Compass({ x, y, r = 38 }) {
+  return (
+    <g transform={`translate(${x},${y})`} opacity="0.55">
+      <circle r={r} fill="none" stroke="var(--ink)" strokeWidth="0.6" />
+      <circle r={r * 0.7} fill="none" stroke="var(--ink)" strokeWidth="0.4" strokeDasharray="2 3" />
+      <g stroke="var(--ink)" strokeWidth="0.6">
+        <line x1={-r} y1="0" x2={r} y2="0" />
+        <line x1="0" y1={-r} x2="0" y2={r} />
+        <line x1={-r * 0.7} y1={-r * 0.7} x2={r * 0.7} y2={r * 0.7} opacity="0.4" />
+        <line x1={-r * 0.7} y1={r * 0.7}  x2={r * 0.7} y2={-r * 0.7} opacity="0.4" />
+      </g>
+      <polygon points={`0,${-r + 2} 4,0 0,${r - 2} -4,0`} fill="var(--ink)" opacity="0.85" />
+      <text x="0" y={-r - 6} textAnchor="middle" fontSize="9" fontFamily="var(--mono)" fill="var(--ink)" opacity="0.7">N</text>
+    </g>
+  );
+}
+
+// Station node: a port with a ring, layer numeral, and label cluster.
+function Station({ x, y, n, label, sublabel, secLabel, authority, selected, onClick, color = "var(--marine)", overlays }) {
+  return (
+    <g
+      className={`station ${selected ? "selected" : ""}`}
+      transform={`translate(${x},${y})`}
+      onClick={onClick}
+      style={{ cursor: "pointer" }}
+    >
+      {/* Outer aim circle */}
+      <circle r="42" fill="none" stroke={color} strokeOpacity="0.18" strokeWidth="1" strokeDasharray="3 4" />
+      {/* Inner port disk */}
+      <circle r="28" fill="var(--paper)" stroke={color} strokeOpacity="0.55" strokeWidth="1.2" className="station-ring" />
+      <circle r="20" fill="rgba(255,255,255,0.6)" stroke={color} strokeOpacity="0.3" strokeWidth="0.8" />
+      {/* Layer numeral */}
+      <text textAnchor="middle" y="6" fontFamily="var(--display)" fontSize="22" fontWeight="500" fill="var(--ink)">
+        {n}
+      </text>
+      {/* Layer label (above) */}
+      <text textAnchor="middle" y="-54" fontFamily="var(--mono)" fontSize="10" letterSpacing="2.4" fill="var(--ink-soft)">
+        LAYER {n}
+      </text>
+      {/* v2.0 — andragogy badge on L1 as design authority. Drawn between
+          the LAYER label and the disk top so the disk numeral stays legible. */}
+      {authority && (
+        <text textAnchor="middle" y="-40" fontFamily="var(--display)" fontStyle="italic" fontSize="11.5" fill={color} opacity="0.95">
+          ◊ {authority}
+        </text>
+      )}
+      {/* Plain label (below) */}
+      <text textAnchor="middle" y="62" fontFamily="var(--display)" fontSize="22" fill="var(--ink)">
+        {label}
+      </text>
+      <text textAnchor="middle" y="80" fontFamily="var(--body)" fontSize="12" fill="var(--ink-soft)">
+        {sublabel}
+      </text>
+      {/* SECI overlay label (conditional) */}
+      {overlays.seci && (
+        <g className="reveal">
+          <rect x="-44" y="92" width="88" height="18" rx="2" fill="none" stroke="var(--marine)" strokeWidth="0.8" />
+          <text textAnchor="middle" y="105" fontFamily="var(--mono)" fontSize="9.5" letterSpacing="1.2" fill="var(--marine)">
+            {secLabel}
+          </text>
+        </g>
+      )}
+    </g>
+  );
+}
+
+// Lateral marker (arrival / impact)
+function EndCap({ x, y, label, sublabel, side = "left", color = "var(--copper)" }) {
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <rect x="-30" y="-22" width="60" height="44" fill="none" stroke={color} strokeWidth="1" strokeOpacity="0.6" strokeDasharray="2 3" />
+      <text textAnchor="middle" y="-32" fontFamily="var(--mono)" fontSize="9.5" letterSpacing="1.8" fill="var(--ink-soft)">
+        {side === "left" ? "ARRIVAL" : "IMPACT"}
+      </text>
+      <text textAnchor="middle" y="3" fontFamily="var(--display)" fontSize="14" fill="var(--ink)">
+        {label}
+      </text>
+      <text textAnchor="middle" y="20" fontFamily="var(--body)" fontSize="11" fill="var(--ink-soft)">
+        {sublabel}
+      </text>
+    </g>
+  );
+}
+
+// Main hero flow
+function HeroFlow({ selected, setSelected, overlays, playing, cycle }) {
+  const [t, setT] = useState(0); // 0..1 cargo position along main lane
+  const rafRef = useRef(null);
+  const lastRef = useRef(null);
+
+  // Animate cargo position
+  useEffect(() => {
+    if (!playing) {
+      cancelAnimationFrame(rafRef.current);
+      return;
+    }
+    const tick = (now) => {
+      if (lastRef.current == null) lastRef.current = now;
+      const dt = (now - lastRef.current) / 1000;
+      lastRef.current = now;
+      setT((prev) => (prev + dt / 14) % 1); // 14s loop
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      lastRef.current = null;
+    };
+  }, [playing]);
+
+  // Coordinates
+  const W = 1500, H = 560;
+  const ARRIVAL = [120, 320];
+  const L1 = [380, 300];
+  const L2 = [740, 320];
+  const L3 = [1120, 300];
+  const IMPACT = [1380, 320];
+
+  const stations = [
+    { key: "learn",    n: 1, x: L1[0], y: L1[1], label: "Learn", sublabel: "GenAI companion", secLabel: "EXTERNALISATION", color: "var(--marine)", authority: "andragogy · design authority" },
+    { key: "share",    n: 2, x: L2[0], y: L2[1], label: "Share", sublabel: "Knowledge platform", secLabel: "COMBINATION", color: "var(--marine)" },
+    { key: "innovate", n: 3, x: L3[0], y: L3[1], label: "Innovate", sublabel: "Innovation platform", secLabel: "INTERNALISATION", color: "var(--copper)" },
+  ];
+
+  // Main lane polyline (gentle)
+  const mainPoints = [ARRIVAL, L1, L2, L3, IMPACT];
+  const mainD = lanePath(mainPoints);
+
+  // Path measurement for cargo position
+  const pathRef = useRef(null);
+  const [pathLen, setPathLen] = useState(1);
+  useEffect(() => {
+    if (pathRef.current) setPathLen(pathRef.current.getTotalLength());
+  }, []);
+
+  let cargoPt = ARRIVAL;
+  if (pathRef.current) {
+    const p = pathRef.current.getPointAtLength(t * pathLen);
+    cargoPt = [p.x, p.y];
+  }
+
+  // Feedback arc (impact → arrival) — top arc returning knowledge
+  const fbD = `M ${IMPACT[0]} ${IMPACT[1] - 30} C ${IMPACT[0]} ${60}, ${ARRIVAL[0]} ${60}, ${ARRIVAL[0]} ${ARRIVAL[1] - 30}`;
+
+  // Cluster nodes hovering above Share (subtle)
+  const clusterDots = useMemo(() => {
+    const dots = [];
+    for (let i = 0; i < 14; i++) {
+      const angle = (i / 14) * Math.PI * 2;
+      const r = 50 + (i % 3) * 14;
+      dots.push([L2[0] + Math.cos(angle) * r, L2[1] - 130 + Math.sin(angle) * (r * 0.5)]);
+    }
+    return dots;
+  }, []);
+
+  // Acquisition vessels (left edge, indexed by cycle)
+  const vessels = Array.from({ length: 5 }, (_, i) => ({
+    x: 40 + i * 14,
+    y: 460 + (i % 2) * 6,
+    active: i < cycle,
+  }));
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="full" style={{ maxHeight: 620, display: "block" }} preserveAspectRatio="xMidYMid meet">
+      <defs>
+        {/* SECI spine gradient — tacit (paper) → externalisation/combination (marine)
+            → internalisation/socialisation (copper) → re-tacit (paper). Always-on
+            colour band beneath the formal shipping lane; the integrating theory
+            embodied as the lane's substrate rather than as an opt-in overlay. */}
+        <linearGradient id="seci-spine" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stopColor="#DDD6C4" stopOpacity="0" />
+          <stop offset="10%"  stopColor="#1F6F7B" stopOpacity="0.18" />
+          <stop offset="26%"  stopColor="#1F6F7B" stopOpacity="0.42" />
+          <stop offset="50%"  stopColor="#2B8A99" stopOpacity="0.50" />
+          <stop offset="74%"  stopColor="#B5613B" stopOpacity="0.45" />
+          <stop offset="90%"  stopColor="#C97A52" stopOpacity="0.22" />
+          <stop offset="100%" stopColor="#DDD6C4" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+
+      {/* Lat/lon ticks along edges */}
+      <g fontFamily="var(--mono)" fontSize="9" fill="var(--ink-soft)" opacity="0.55">
+        {[100, 220, 340, 460].map((y) => (
+          <g key={"yt" + y}>
+            <line x1="0" y1={y} x2="10" y2={y} stroke="var(--ink-soft)" strokeWidth="0.6" />
+            <text x="14" y={y + 3}>{(46 - y / 24).toFixed(1)}°N</text>
+          </g>
+        ))}
+        {[200, 500, 800, 1100, 1400].map((x) => (
+          <g key={"xt" + x}>
+            <line x1={x} y1="0" x2={x} y2="10" stroke="var(--ink-soft)" strokeWidth="0.6" />
+            <text x={x + 4} y="20">{(x / 8 - 80).toFixed(0)}°E</text>
+          </g>
+        ))}
+      </g>
+
+      <Compass x={W - 70} y={80} r={32} />
+
+      {/* Feedback arc — drawn behind */}
+      <path d={fbD} fill="none" stroke="var(--copper)" strokeWidth="1" strokeOpacity="0.65" strokeDasharray="2 5" />
+      <text fontFamily="var(--mono)" fontSize="10" letterSpacing="2" fill="var(--copper)" x={W / 2 - 90} y="58">
+        ↺ SELF-REINFORCING CYCLE — each revolution raises the baseline
+      </text>
+
+      {/* Vessels (acquisitions in the system) */}
+      <g>
+        {vessels.map((v, i) => (
+          <g key={"v" + i} opacity={v.active ? 0.95 : 0.25}>
+            <path
+              d={`M ${v.x} ${v.y} l 14 0 l 3 -5 l -20 0 z`}
+              fill={v.active ? "var(--ink)" : "var(--ink-soft)"}
+            />
+            <line x1={v.x + 7} y1={v.y - 5} x2={v.x + 7} y2={v.y - 16} stroke="var(--ink)" strokeWidth="1" />
+            <path d={`M ${v.x + 7} ${v.y - 16} l 6 5 l -6 0 z`} fill="var(--copper)" opacity={v.active ? 1 : 0.4} />
+          </g>
+        ))}
+        <text x="40" y="500" fontFamily="var(--mono)" fontSize="9.5" letterSpacing="1.6" fill="var(--ink-soft)">
+          ACQUISITION COHORTS &nbsp;·&nbsp; t{cycle}
+        </text>
+      </g>
+
+      {/* Knowledge cluster above Share */}
+      <g opacity="0.85">
+        {clusterDots.map((d, i) => (
+          <circle
+            key={i}
+            cx={d[0]}
+            cy={d[1]}
+            r={i === 5 || i === 9 || i === 12 ? 4 : 2.2}
+            fill={i === 5 || i === 9 || i === 12 ? "var(--copper)" : "var(--marine)"}
+            opacity={i === 5 || i === 9 || i === 12 ? 0.9 : 0.55}
+          />
+        ))}
+        {/* connecting hairlines for one cluster */}
+        <g stroke="var(--copper)" strokeWidth="0.6" strokeOpacity="0.55">
+          <line x1={clusterDots[5][0]} y1={clusterDots[5][1]} x2={clusterDots[9][0]} y2={clusterDots[9][1]} />
+          <line x1={clusterDots[9][0]} y1={clusterDots[9][1]} x2={clusterDots[12][0]} y2={clusterDots[12][1]} />
+          <line x1={clusterDots[12][0]} y1={clusterDots[12][1]} x2={clusterDots[5][0]} y2={clusterDots[5][1]} />
+        </g>
+        <text x={L2[0] + 80} y={L2[1] - 165} fontFamily="var(--mono)" fontSize="9.5" letterSpacing="1.4" fill="var(--ink-soft)">
+          EMERGENT KNOWLEDGE CLUSTERS
+        </text>
+      </g>
+
+      {/* SECI spine — gradient band beneath the formal lane. v2.0: SECI promoted
+          from overlay toggle to integrating-theory spine; gradient is always
+          visible. The dashed black lane sits on top as the formal shipping lane. */}
+      <path d={mainD} fill="none" stroke="url(#seci-spine)" strokeWidth="24" strokeLinecap="round" />
+
+      {/* Main shipping lane */}
+      <path
+        ref={pathRef}
+        d={mainD}
+        fill="none"
+        stroke="var(--ink)"
+        strokeWidth="1.4"
+        className={`lane-dash ${playing ? "" : "paused"}`}
+        opacity="0.85"
+      />
+
+      {/* SECI mode labels along the lane — always-on annotations of the spine.
+          The per-station SECI overlay still controls the fuller per-port boxes. */}
+      <g fontFamily="var(--mono)" fontSize="9" letterSpacing="1.6" fill="var(--marine)" textAnchor="middle" opacity="0.75">
+        <text x={(ARRIVAL[0] + L1[0]) / 2} y="354">→ EXTERNALISATION →</text>
+        <text x={(L1[0] + L2[0]) / 2}     y="354">→ COMBINATION →</text>
+        <text x={(L2[0] + L3[0]) / 2}     y="354" fill="var(--copper)">→ INTERNALISATION · SOCIALISATION →</text>
+        <text x={(L3[0] + IMPACT[0]) / 2} y="354" fill="var(--copper)" opacity="0.55">→ re-tacit → next cycle</text>
+      </g>
+
+      {/* Quadruple-duty metadata indicator on the lane between L1 → L2.
+          v2.0: fourth bar added — acquisition-cohort metadata is the data
+          foundation for double-loop reflection (v5 §6.2). */}
+      <g transform={`translate(${(L1[0] + L2[0]) / 2 - 84}, ${(L1[1] + L2[1]) / 2 - 70})`}>
+        <rect width="168" height="30" rx="3" fill="rgba(255,252,245,0.85)" stroke="var(--ink)" strokeOpacity="0.5" />
+        <text x="8" y="13" fontFamily="var(--mono)" fontSize="9" letterSpacing="1.2" fill="var(--ink-soft)">
+          MANIFEST · QUADRUPLE-DUTY METADATA
+        </text>
+        <g transform="translate(8, 18)">
+          <rect width="34" height="8" fill="var(--marine)" opacity="0.7" />
+          <rect x="38" width="34" height="8" fill="var(--copper)" opacity="0.7" />
+          <rect x="76" width="34" height="8" fill="var(--signal)" opacity="0.7" />
+          <rect x="114" width="34" height="8" fill="var(--ink-2)" opacity="0.7" />
+        </g>
+      </g>
+
+      {/* End caps */}
+      <EndCap
+        x={ARRIVAL[0]} y={ARRIVAL[1]}
+        label="Acquired workforce"
+        sublabel="Situated tacit knowledge"
+        side="left"
+      />
+      <EndCap
+        x={IMPACT[0]} y={IMPACT[1]}
+        label="Capability ↑"
+        sublabel="Culture · Innovation"
+        side="right"
+        color="var(--marine)"
+      />
+
+      {/* Stations */}
+      {stations.map((s) => (
+        <Station
+          key={s.key}
+          {...s}
+          selected={selected === s.key}
+          onClick={() => setSelected(selected === s.key ? null : s.key)}
+          overlays={overlays}
+        />
+      ))}
+
+      {/* Maynard overlay: threat/opportunity quadrant chips near stations */}
+      {overlays.maynard && (
+        <g className="reveal">
+          <g transform={`translate(${ARRIVAL[0] - 50}, ${ARRIVAL[1] + 60})`}>
+            <rect width="100" height="34" fill="none" stroke="var(--copper)" strokeWidth="0.8" rx="2" />
+            <text x="50" y="14" textAnchor="middle" fontFamily="var(--mono)" fontSize="9" fill="var(--copper)" letterSpacing="1.2">NEAR-TERM</text>
+            <text x="50" y="28" textAnchor="middle" fontFamily="var(--body)" fontSize="10.5" fill="var(--ink)">trust rupture · siloing</text>
+          </g>
+          <g transform={`translate(${IMPACT[0] - 50}, ${IMPACT[1] + 60})`}>
+            <rect width="100" height="34" fill="none" stroke="var(--copper)" strokeWidth="0.8" rx="2" />
+            <text x="50" y="14" textAnchor="middle" fontFamily="var(--mono)" fontSize="9" fill="var(--copper)" letterSpacing="1.2">FAR-TERM</text>
+            <text x="50" y="28" textAnchor="middle" fontFamily="var(--body)" fontSize="10.5" fill="var(--ink)">extending capacity</text>
+          </g>
+        </g>
+      )}
+
+      {/* Roles overlay near L3 */}
+      {overlays.roles && (
+        <g className="reveal" transform={`translate(${L3[0] - 80}, ${L3[1] - 170})`}>
+          {[
+            ["Initiator", "frames HMW"],
+            ["Contributor", "all employees"],
+            ["Evaluator", "domain experts"],
+            ["Stakeholder", "mgmt sponsors"],
+          ].map((r, i) => (
+            <g key={r[0]} transform={`translate(0, ${i * 22})`}>
+              <rect width="160" height="18" fill="rgba(255,252,245,0.85)" stroke="var(--signal)" strokeWidth="0.7" rx="2" />
+              <text x="8" y="12" fontFamily="var(--mono)" fontSize="9.5" letterSpacing="1" fill="var(--ink)">{r[0].toUpperCase()}</text>
+              <text x="74" y="12" fontFamily="var(--body)" fontSize="10" fill="var(--ink-soft)">{r[1]}</text>
+            </g>
+          ))}
+          <text x="0" y="-6" fontFamily="var(--mono)" fontSize="9" letterSpacing="1.6" fill="var(--signal)">ROLES — INNOVATION FLYWHEEL</text>
+        </g>
+      )}
+
+      {/* Animated cargo on lane */}
+      <g>
+        <circle cx={cargoPt[0]} cy={cargoPt[1]} r="14" fill="none" stroke="var(--marine)" strokeOpacity="0.4" strokeWidth="1" />
+        <Cargo x={cargoPt[0]} y={cargoPt[1]} scale={1} />
+      </g>
+
+      {/* Caption strip beneath lane — flow legend */}
+      <g fontFamily="var(--mono)" fontSize="10" fill="var(--ink-soft)" letterSpacing="1.4">
+        <text x={ARRIVAL[0]} y={H - 60} textAnchor="middle">TACIT</text>
+        <text x={L1[0]} y={H - 60} textAnchor="middle">→ STRUCTURED ARTEFACT</text>
+        <text x={L2[0]} y={H - 60} textAnchor="middle">→ VISIBLE · CLUSTERED</text>
+        <text x={L3[0]} y={H - 60} textAnchor="middle">→ HOW MIGHT WE</text>
+        <text x={IMPACT[0]} y={H - 60} textAnchor="middle">→ IMPLEMENTED</text>
+      </g>
+    </svg>
+  );
+}
+
+// Export to window for cross-file access
+Object.assign(window, { HeroFlow });
+
+  </script>
+
+  <script type="text/babel" data-presets="env,react">
+/* global React */
+// mechanisms.jsx — detail panels for the three stations + supporting mechanism explainers
+// Exports: StationDetail, TripleDuty, FourOutcomes, AutomationPipeline, Flywheel, AcquisitionSlider
+
+const { useState: useStateMech, useMemo: useMemoMech } = React;
+
+// ───────────────────────── STATION DETAIL ─────────────────────────
+const STATION_COPY = {
+  learn: {
+    n: 1,
+    plain: "Learn",
+    academic: "Externalisation",
+    sub: "GenAI companion — pedagogically guardrailed",
+    color: "var(--marine)",
+    coord: "L1 · 27.3°N",
+    body: {
+      plain: "A guardrailed AI companion scaffolds employees through real operational challenges — customs cases, client situations, regulatory scenarios — drawn from their own offices. Each activity produces a structured artefact with embedded tags at the moment of creation. The PD Manager's job shifts from delivering content to collecting stories.",
+      academic: "Operationalises Nonaka's (1994) externalisation: tacit operational expertise is converted into explicit, structured outputs through scaffolded engagement. Guardrails respond to Lee et al. (2025) and Bastani et al. (2025) — scaffolded prompting, progressive fading, metacognitive probes. Activities follow andragogical principles (Knowles, 1984): self-direction, relevance, experience as resource.",
+    },
+    pillars: [
+      { label: "Scaffolded prompting", detail: "The companion asks questions before offering analysis." },
+      { label: "Progressive fading",   detail: "Scaffolds reduce as the learner's competence grows." },
+      { label: "Metacognitive probes", detail: "“What do you think?” precedes synthesis." },
+      { label: "Triple-duty metadata", detail: "Tags are produced as a natural by-product of the activity." },
+    ],
+    constraint: "Critical thinking with AI — not deference to it — is an explicit learning objective.",
+  },
+  share: {
+    n: 2,
+    plain: "Share",
+    academic: "Combination",
+    sub: "Organisational knowledge platform",
+    color: "var(--marine)",
+    coord: "L2 · 14.5°N",
+    body: {
+      plain: "Artefacts publish to a single platform where structured metadata makes them searchable, filterable, and clusterable across offices and acquisition cohorts. The platform doesn't curate — its affordances surface patterns. An analysis from Perth finds its companions in Singapore, Auckland, and Hamburg without anyone being told to look.",
+      academic: "Affordances of visibility and persistence (Ellison et al., 2015), network-informed associating and triggered attending (Majchrzak et al., 2013), and asymmetric engagement (Safadi, 2024) create conditions for emergent knowledge patterns. CoP-style identification forms through participation (Spoor & Chu, 2018) — contribution is the mechanism of belonging.",
+    },
+    pillars: [
+      { label: "Visibility · persistence",  detail: "Outputs are seen across the network and remain available over time." },
+      { label: "Network-informed associating", detail: "Tags surface adjacent expertise the employee didn't know existed." },
+      { label: "Asymmetric engagement",        detail: "Most colleagues learn from the artefact without active interaction." },
+      { label: "Contribution = belonging",     detail: "Acquired employees become visible members through what they share." },
+    ],
+    constraint: "Technology alone reinforces existing boundaries (Swan et al., 1999) — community design is what makes the platform generative.",
+  },
+  innovate: {
+    n: 3,
+    plain: "Innovate",
+    academic: "Internalisation · the nested flywheel",
+    sub: "Innovation management platform",
+    color: "var(--copper)",
+    coord: "L3 · 32.7°N",
+    body: {
+      plain: "Clusters surfacing in Layer 2 become inputs to a goal-driven innovation cycle. Initiators frame “How Might We” challenges with the cluster as evidence. Contributors from across acquisition cohorts shape the response. Phase-gated evaluation preserves rigour; reasoned feedback closes the loop. Implemented ideas feed the next revolution.",
+      academic: "The internal flywheel — Collect · Engage · Manage · Measure — nests inside the framework cycle. Stage-gate evaluation is preserved (Cooper, 1990) but the overall process is framed as self-reinforcing rather than filtering. Idea selection benefits from functional diversity (Beretta, 2018) — a structurally diverse acquired workforce is well-positioned to generate implementable innovation.",
+    },
+    pillars: [
+      { label: "Collect", detail: "Goal-driven idea campaigns prompted by clusters from Layer 2." },
+      { label: "Engage",  detail: "Cross-boundary contribution from across the global network." },
+      { label: "Manage",  detail: "Phase-gated evaluation with reasoned, transparent feedback." },
+      { label: "Measure", detail: "Impact tracked back to the originating practitioner insight." },
+    ],
+    constraint: "Innovation slack must be protected (Wihlman et al., 2014); the cycle is part of work, not additional to it.",
+  },
+};
+
+function StationDetail({ which, register, onClose }) {
+  if (!which) return null;
+  const s = STATION_COPY[which];
+  const useAcademic = register === "academic";
+  const showBoth = register === "layered";
+  const body = useAcademic ? s.body.academic : s.body.plain;
+
+  return (
+    <div className="panel reveal" style={{ borderColor: "var(--ink)", borderWidth: 1 }}>
+      <div className="flex between" style={{ alignItems: "flex-start", gap: 24 }}>
+        <div className="col gap-6" style={{ flex: 1 }}>
+          <div className="flex center gap-12" style={{ flexWrap: "wrap" }}>
+            <span className="chip"><span className="dot" style={{ background: s.color }}></span>LAYER {s.n}</span>
+            <span className="coord mono">{s.coord}</span>
+            <span className="coord mono">·</span>
+            <span className="coord mono">{s.sub.toUpperCase()}</span>
+          </div>
+          <h3 className="display" style={{ marginTop: 6 }}>
+            {s.plain} <span style={{ color: "var(--ink-soft)", fontStyle: "italic" }}>
+              {showBoth || useAcademic ? `— ${s.academic}` : ""}
+            </span>
+          </h3>
+        </div>
+        <button className="btn ghost" onClick={onClose} aria-label="Close">close ✕</button>
+      </div>
+
+      <p style={{ marginTop: 16, maxWidth: 820, fontSize: 15.5 }}>{body}</p>
+
+      {showBoth && (
+        <p style={{ marginTop: 4, maxWidth: 820, fontSize: 13.5, color: "var(--ink-soft)" }}>
+          <span className="eyebrow" style={{ display: "block", marginBottom: 4 }}>Theoretical grounding</span>
+          {s.body.academic}
+        </p>
+      )}
+
+      {/* Pillars grid */}
+      <div className="full" style={{ marginTop: 18, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
+        {s.pillars.map((p) => (
+          <div key={p.label} className="card lift" style={{ padding: 14 }}>
+            <div className="eyebrow" style={{ marginBottom: 6 }}>{p.label}</div>
+            <div className="small" style={{ color: "var(--ink)" }}>{p.detail}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ marginTop: 16, padding: "10px 14px", borderLeft: `3px solid ${s.color}`, background: "rgba(255,255,255,0.4)" }}>
+        <div className="eyebrow" style={{ marginBottom: 4 }}>Design constraint</div>
+        <div className="small" style={{ color: "var(--ink)" }}>{s.constraint}</div>
+      </div>
+    </div>
+  );
+}
+
+// ───────────────────────── QUADRUPLE-DUTY METADATA ─────────────────────────
+// v2.0: renamed from TripleDuty. v5 added acquisition-cohort metadata as the
+// fourth duty — the data foundation for double-loop reflection. Function
+// name kept as `TripleDuty` so the export contract stays stable for app.jsx;
+// the rename is in the UI copy and section heading only.
+function TripleDuty({ register }) {
+  const [hover, setHover] = useStateMech(null); // 'L1' | 'L2' | 'L3' | 'L4'
+
+  const uses = [
+    {
+      key: "L1",
+      tag: "L1",
+      label: "Structures the learning",
+      plain: "Tags emerge from the activity itself — the questions employees answer become the metadata.",
+      academic: "Andragogical scaffolding: the employee's articulation of context, domain, and stakes IS the metadata generation (Knowles, 1984; Musen et al., 2022).",
+      color: "var(--marine)",
+    },
+    {
+      key: "L2",
+      tag: "L2",
+      label: "Enables discovery & clustering",
+      plain: "On the shared platform, structured tags make patterns visible across offices and acquisition cohorts.",
+      academic: "FAIR-aligned (Wilkinson et al., 2016): findable, accessible, interoperable, reusable across the global network without bespoke curation.",
+      color: "var(--copper)",
+    },
+    {
+      key: "L3",
+      tag: "L3",
+      label: "Triggers the innovation pipeline",
+      plain: "Automation rules monitor for clusters; threshold breaches flag an Initiator to frame a “How Might We” challenge.",
+      academic: "Legibility before liquidity (Hockenmaier, 2023): structured artefacts are the SKUs that allow tacit practitioner expertise to scale to organisational action.",
+      color: "var(--signal)",
+    },
+    {
+      key: "L4",
+      tag: "↺",
+      label: "Surfaces cohort patterns",
+      plain: "The cohort tag travels with every artefact. At cohort scale, the same clustering operations reveal how each acquired workforce is settling in — adoption velocity, time-to-cluster, conversion rate.",
+      academic: "Double-loop reflection (Argyris & Schön, 1978; Zollo & Singh, 2004) embedded in normal system operations: cohort-level pattern detection through standard L2 clustering, surfaced to leadership for interpretive sense-making across acquisition cycles.",
+      color: "var(--ink-2)",
+    },
+  ];
+
+  return (
+    <div className="col gap-24">
+      <div className="flex between center wrap gap-16">
+        <div>
+          <div className="eyebrow">Connective tissue · v6</div>
+          <h2 className="display" style={{ marginTop: 6 }}>One manifest, four duties.</h2>
+        </div>
+        <span className="coord mono">designed once at point of creation → used four ways downstream</span>
+      </div>
+
+      {/* The shared tag visualisation */}
+      <div className="card" style={{ padding: 28, background: "rgba(255,252,245,0.6)" }}>
+        <div className="corner tl"></div><div className="corner tr"></div>
+        <div className="corner bl"></div><div className="corner br"></div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 32, alignItems: "center" }}>
+          {/* Tag */}
+          <div className="col gap-12">
+            <div className="eyebrow">Sample manifest</div>
+            <div style={{ border: "1px solid var(--ink)", borderRadius: 4, padding: 14, background: "#FBF6E9" }}>
+              <div className="mono tiny muted" style={{ letterSpacing: "1.4px" }}>ARTEFACT · 2026.05.22 · WHL-PER-K047</div>
+              <div className="display" style={{ fontSize: 17, marginTop: 4 }}>Pharmaceutical cold-chain handover</div>
+              <div className="small muted" style={{ marginTop: 2 }}>Process reflection · Customs Compliance · Perth office</div>
+              <div className="flex wrap gap-6" style={{ marginTop: 12 }}>
+                {[
+                  { l: "domain:customs.cold-chain", c: "var(--marine)", k: "L1" },
+                  { l: "type:process-reflection",   c: "var(--marine)", k: "L1" },
+                  { l: "office:perth",              c: "var(--copper)", k: "L2" },
+                  { l: "issue:documentation-delay", c: "var(--signal)", k: "L3" },
+                  { l: "freight:pharma",            c: "var(--signal)", k: "L3" },
+                  { l: "cohort:acquired-2024-q3",   c: "var(--ink-2)",  k: "L4" },
+                ].map((t) => (
+                  <span
+                    key={t.l}
+                    className="tag"
+                    style={{
+                      borderColor: hover === t.k ? t.c : "var(--rule)",
+                      background: hover === t.k ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.5)",
+                      transition: "border-color 0.18s, background 0.18s",
+                    }}
+                  >
+                    <span className="swatch" style={{ background: t.c }}></span>
+                    {t.l}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="tiny muted">Hover a duty (right) to see which tags carry that load. The cohort tag carries the fourth duty by itself.</div>
+          </div>
+
+          {/* Four duties */}
+          <div className="col gap-10">
+            {uses.map((u) => (
+              <div
+                key={u.key}
+                className="card lift"
+                onMouseEnter={() => setHover(u.key)}
+                onMouseLeave={() => setHover(null)}
+                style={{ padding: 14, borderColor: hover === u.key ? u.color : "var(--rule)", display: "grid", gridTemplateColumns: "44px 1fr 64px", gap: 14, alignItems: "start" }}
+              >
+                <div style={{ width: 44, height: 44, borderRadius: 22, border: `1px solid ${u.color}`, display: "grid", placeItems: "center", color: u.color }}>
+                  <span className="mono tiny" style={{ fontWeight: 600 }}>{u.key}</span>
+                </div>
+                <div style={{ minWidth: 0 }}>
+                  <div className="mono tiny" style={{ color: u.color, letterSpacing: 2, marginBottom: 4 }}>DUTY · {u.key}</div>
+                  <div className="display" style={{ fontSize: 18, lineHeight: 1.15 }}>{u.label}</div>
+                  <div className="small" style={{ marginTop: 6, color: "var(--ink-soft)" }}>
+                    {register === "academic" ? u.academic : u.plain}
+                  </div>
+                  {register === "layered" && (
+                    <div className="tiny" style={{ marginTop: 8, color: "var(--ink-soft)", borderLeft: `2px solid ${u.color}`, paddingLeft: 8 }}>
+                      {u.academic}
+                    </div>
+                  )}
+                </div>
+                <div style={{ width: 64, textAlign: "right", color: u.color, fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 1.4 }}>→ {u.tag}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ───────────────────────── REFLECTION ARCHITECTURE (v2.0) ─────────────────────────
+// v5 §6.2 two-level reflection:
+//   single-loop at each station (platform-embedded operational improvement)
+//   double-loop across cohorts (data-enriched via cohort metadata)
+// This is the marquee structural addition for v2.0 — genuinely new visual real estate.
+function ReflectionArchitecture({ register }) {
+  const loops = [
+    {
+      key: "L1",
+      title: "Artefact spec feedback",
+      owner: "PD Manager",
+      ring: ["user suggests", "manager iterates", "retroactive alert"],
+      plain: "Each PD activity has a 'suggest a change' link. New users notice things the spec missed; specs evolve; prior submitters get a heads-up to update their artefacts to the revised spec.",
+      academic: "Andragogically-grounded single-loop: learners' tacit critique surfaces design limitations in the artefact spec; updates propagate via alert routing to prior submitters, keeping the artefact population current as specifications mature (v5 §6.2; Knowles, 1984).",
+      color: "var(--marine)",
+    },
+    {
+      key: "L2",
+      title: "Cluster rule library",
+      owner: "PD Manager + leadership + broad-role players",
+      ring: ["pattern seen", "rule drafted", "rule versioned"],
+      plain: "The rules that group artefacts into clusters aren't fixed configuration — they're a living, version-controlled library, viewable across the org with its own 'submit insight' link.",
+      academic: "Knowledge-architecture single-loop: rule revision IS the act of getting better at recognising what matters in the accumulating artefact corpus. Owned by roles with cross-functional reach so rules can see across business boundaries (v5 §8.1).",
+      color: "var(--copper)",
+    },
+    {
+      key: "L3",
+      title: "Stage-gate review",
+      owner: "Innovation platform (Ideanote)",
+      ring: ["review", "score", "discuss"],
+      plain: "Reviews, scoring, threaded comments, ROI tracking, leaderboards — reflection is built into the platform's nature, not bolted on.",
+      academic: "Platform-affordance single-loop: stage-gate review, evaluation scoring, and threaded discussion are inherent affordances of the innovation management platform (Endres et al., 2021). Layer 3 has reflection by tool design.",
+      color: "var(--signal)",
+    },
+  ];
+
+  const cohortMetrics = [
+    "adoption velocity",
+    "sophistication per capita",
+    "time-to-cluster",
+    "promotion rate L2→L3",
+    "implementation conversion",
+  ];
+
+  return (
+    <div className="col gap-24">
+      <div className="flex between center wrap gap-16">
+        <div>
+          <div className="eyebrow">Reflection architecture · v6 §6.2 · two levels</div>
+          <h2 className="display" style={{ marginTop: 6 }}>How each cycle gets better.</h2>
+        </div>
+        <span className="coord mono">single-loop at each station · double-loop across cohorts</span>
+      </div>
+
+      <div className="card" style={{ padding: 28 }}>
+        <div className="corner tl"></div><div className="corner tr"></div>
+        <div className="corner bl"></div><div className="corner br"></div>
+
+        {/* DOUBLE-LOOP BAND — cohort metadata across acquisition cycles */}
+        <div style={{ border: "1px dashed var(--ink-2)", borderRadius: 6, padding: 18, background: "rgba(19,58,92,0.05)" }}>
+          <div className="flex between center wrap gap-8" style={{ marginBottom: 14 }}>
+            <div className="mono tiny" style={{ letterSpacing: 1.8, color: "var(--ink-2)" }}>
+              DOUBLE-LOOP · cohort metadata reads patterns across acquisition cycles
+            </div>
+            <div className="tiny mono muted">Zollo &amp; Singh, 2004 · Argyris &amp; Schön, 1978</div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 110px minmax(0, 1fr)", gap: 18, alignItems: "center" }}>
+            {/* Left: cohort metrics surfaced by the system */}
+            <div>
+              <div className="tiny mono muted" style={{ marginBottom: 6, letterSpacing: 1.2 }}>SURFACED BY THE SYSTEM</div>
+              <div className="flex wrap gap-6">
+                {cohortMetrics.map((m) => (
+                  <span key={m} className="tag" style={{ borderColor: "var(--ink-2)" }}>
+                    <span className="swatch" style={{ background: "var(--ink-2)" }}></span>
+                    {m}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Centre: surface ↔ interpret arrows */}
+            <svg viewBox="0 0 110 70" width="110" height="70">
+              <path d="M5 22 Q55 22 95 26" fill="none" stroke="var(--ink-2)" strokeWidth="1" strokeDasharray="2 3" />
+              <polygon points="95,21 103,26 95,31" fill="var(--ink-2)" />
+              <path d="M95 48 Q55 52 5 52" fill="none" stroke="var(--ink-2)" strokeWidth="1" strokeDasharray="2 3" />
+              <polygon points="13,47 5,52 13,57" fill="var(--ink-2)" />
+              <text x="55" y="10" textAnchor="middle" fontFamily="var(--mono)" fontSize="9" letterSpacing="1.2" fill="var(--ink-2)">surface</text>
+              <text x="55" y="68" textAnchor="middle" fontFamily="var(--mono)" fontSize="9" letterSpacing="1.2" fill="var(--ink-2)">refine</text>
+            </svg>
+
+            {/* Right: leadership interpretation */}
+            <div style={{ border: "1px solid var(--ink)", borderRadius: 4, padding: 14, background: "rgba(255,252,245,0.9)" }}>
+              <div className="mono tiny" style={{ letterSpacing: 1.4, color: "var(--ink-2)" }}>INTERPRETED BY LEADERSHIP</div>
+              <div className="small" style={{ marginTop: 6 }}>
+                {register === "academic"
+                  ? "The system surfaces patterns through normal clustering operations; leadership performs the interpretive step that data alone cannot — refining the framework for subsequent acquisition cohorts."
+                  : "The system shows the patterns. Leadership reads them, decides what they mean, and refines the framework for the next acquisition."}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Connecting tissue — cohort metadata flows up from each port */}
+        <div style={{ position: "relative", height: 32, margin: "0 8px" }}>
+          <svg viewBox="0 0 100 32" preserveAspectRatio="none" width="100%" height="32" style={{ position: "absolute", inset: 0 }}>
+            <line x1="17" y1="0" x2="17" y2="32" stroke="var(--ink-2)" strokeWidth="0.6" strokeDasharray="2 3" opacity="0.55" />
+            <line x1="50" y1="0" x2="50" y2="32" stroke="var(--ink-2)" strokeWidth="0.6" strokeDasharray="2 3" opacity="0.55" />
+            <line x1="83" y1="0" x2="83" y2="32" stroke="var(--ink-2)" strokeWidth="0.6" strokeDasharray="2 3" opacity="0.55" />
+          </svg>
+          <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}>
+            <div className="mono tiny" style={{ color: "var(--ink-2)", letterSpacing: 1.4, background: "rgba(255,252,245,0.92)", padding: "2px 8px", borderRadius: 2 }}>
+              cohort:acquired-YYYY-Qn — the fourth duty of the manifest, flowing up
+            </div>
+          </div>
+        </div>
+
+        {/* SINGLE-LOOP — three port cards in a row */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
+          {loops.map((l) => (
+            <div key={l.key} className="card lift" style={{ padding: 16, borderTop: `3px solid ${l.color}` }}>
+              <div className="flex between center" style={{ marginBottom: 8 }}>
+                <div className="mono tiny" style={{ color: l.color, letterSpacing: 1.6, whiteSpace: "nowrap" }}>{l.key} · SINGLE-LOOP</div>
+                {/* Recursive arrow glyph — a small port-return loop */}
+                <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true">
+                  <path d="M 10 3.5 A 6.5 6.5 0 1 1 4.5 6.2" fill="none" stroke={l.color} strokeWidth="1.5" strokeLinecap="round" />
+                  <polygon points="3.5,3 7.6,5.6 4.4,9" fill={l.color} />
+                </svg>
+              </div>
+              <div className="display" style={{ fontSize: 17, lineHeight: 1.18 }}>{l.title}</div>
+              <div className="tiny mono" style={{ marginTop: 6, color: "var(--copper)", letterSpacing: 0.8 }}>gov · {l.owner}</div>
+              <div className="small muted" style={{ marginTop: 10 }}>
+                {register === "academic" ? l.academic : l.plain}
+              </div>
+              {register === "layered" && (
+                <div className="tiny" style={{ marginTop: 8, color: "var(--ink-soft)", borderLeft: `2px solid ${l.color}`, paddingLeft: 8 }}>
+                  {l.academic}
+                </div>
+              )}
+              <div className="flex wrap center gap-4" style={{ marginTop: 12, paddingTop: 10, borderTop: "1px solid var(--rule-soft)" }}>
+                {l.ring.map((r, i) => (
+                  <React.Fragment key={r}>
+                    <span className="mono" style={{ fontSize: 10, color: "var(--ink-soft)", letterSpacing: 0.4 }}>{r}</span>
+                    {i < l.ring.length - 1 && <span style={{ color: l.color, fontSize: 11 }}>→</span>}
+                  </React.Fragment>
+                ))}
+                <span style={{ color: l.color, fontSize: 13, marginLeft: 2 }}>↻</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ───────────────────────── FOUR SIMULTANEOUS OUTCOMES ─────────────────────────
+function FourOutcomes({ register }) {
+  const outcomes = [
+    { label: "Individual capability",   sub: "the traditional L&D function", color: "var(--marine)",  detail: "Salas et al. (2012); Heilmann et al. (2020)" },
+    { label: "Surfaced tacit knowledge", sub: "Nonaka's externalisation",     color: "var(--ink-2)",   detail: "Nonaka (1994); Kucharska et al. (2023)" },
+    { label: "Organisational visibility",sub: "affordance-enabled combination", color: "var(--copper)",detail: "Ellison et al. (2015); Majchrzak et al. (2013); Safadi (2024)" },
+    { label: "Belonging through contribution", sub: "CoP identification by participation", color: "var(--signal)", detail: "Spoor & Chu (2018); Ardichvili et al. (2003)" },
+  ];
+
+  return (
+    <div className="col gap-24">
+      <div className="flex between center wrap gap-16">
+        <div>
+          <div className="eyebrow">From a single PD activity</div>
+          <h2 className="display" style={{ marginTop: 6 }}>Four outcomes — one action.</h2>
+        </div>
+        <span className="coord mono">acquired employees do not have to choose between identity and integration</span>
+      </div>
+
+      <div className="card" style={{ padding: 32 }}>
+        <div className="corner tl"></div><div className="corner tr"></div>
+        <div className="corner bl"></div><div className="corner br"></div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "minmax(220px, 280px) 1fr", gap: 36, alignItems: "center" }}>
+          {/* Centre node */}
+          <div className="col center" style={{ alignItems: "center", textAlign: "center" }}>
+            <svg viewBox="0 0 200 200" width="200" height="200">
+              <circle cx="100" cy="100" r="78" fill="none" stroke="var(--ink)" strokeWidth="0.6" strokeDasharray="3 4" />
+              <circle cx="100" cy="100" r="56" fill="rgba(255,252,245,0.9)" stroke="var(--ink)" strokeWidth="1" />
+              <text x="100" y="92" textAnchor="middle" fontFamily="var(--mono)" fontSize="9" letterSpacing="1.6" fill="var(--ink-soft)">ONE</text>
+              <text x="100" y="112" textAnchor="middle" fontFamily="var(--display)" fontSize="18" fill="var(--ink)">PD activity</text>
+              {/* Rays */}
+              {[0, 90, 180, 270].map((a, i) => (
+                <g key={a} transform={`rotate(${a} 100 100)`}>
+                  <line x1="100" y1="22" x2="100" y2="44" stroke="var(--ink-soft)" strokeWidth="0.6" />
+                  <polygon points="100,18 96,26 104,26" fill="var(--ink-soft)" />
+                </g>
+              ))}
+            </svg>
+            <div className="eyebrow" style={{ marginTop: 6 }}>produces, simultaneously →</div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            {outcomes.map((o) => (
+              <div key={o.label} className="card lift" style={{ padding: 16, borderLeft: `3px solid ${o.color}` }}>
+                <div className="display" style={{ fontSize: 18 }}>{o.label}</div>
+                <div className="small muted" style={{ marginTop: 2 }}>{o.sub}</div>
+                {register !== "plain" && (
+                  <div className="tiny mono" style={{ marginTop: 8, color: "var(--ink-soft)" }}>{o.detail}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ───────────────────────── AUTOMATION PIPELINE L2 → L3 ─────────────────────────
+function AutomationPipeline({ register }) {
+  const [threshold, setThreshold] = useStateMech(3);
+  // Mock cluster grid — count how many "cluster" nodes (active nodes)
+  const grid = useMemoMech(() => {
+    // 8x4 grid of nodes; some "active" (light), some "cluster" (denser per threshold)
+    const cells = [];
+    for (let i = 0; i < 32; i++) cells.push({ i, active: false, cluster: false });
+    // Light activity scattered
+    const activeIdx = [1, 3, 4, 8, 11, 12, 15, 17, 19, 22, 24, 27, 30];
+    activeIdx.forEach((i) => (cells[i].active = true));
+    // Cluster — increasing density
+    const clusterIdx = [10, 11, 18, 19, 26, 27].slice(0, Math.min(threshold * 2, 6));
+    clusterIdx.forEach((i) => { cells[i].active = true; cells[i].cluster = true; });
+    return cells;
+  }, [threshold]);
+
+  const fires = grid.filter((c) => c.cluster).length >= threshold * 2;
+
+  return (
+    <div className="col gap-24">
+      <div className="flex between center wrap gap-16">
+        <div>
+          <div className="eyebrow">Layer 2 → Layer 3 pipeline</div>
+          <h2 className="display" style={{ marginTop: 6 }}>Automation surfaces patterns. Humans decide.</h2>
+        </div>
+        <span className="coord mono">a 200+ office network produces volume; design preserves judgment</span>
+      </div>
+
+      <div className="card" style={{ padding: 28 }}>
+        <div className="corner tl"></div><div className="corner tr"></div>
+        <div className="corner bl"></div><div className="corner br"></div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 80px 1fr 80px 1fr", gap: 20, alignItems: "stretch" }}>
+          {/* Step 1: Cluster map */}
+          <div className="col gap-12">
+            <div className="eyebrow">① CLUSTER</div>
+            <div className="small muted">
+              {register === "academic"
+                ? "Metadata co-occurrence over a defined time window across geographically distinct offices."
+                : "When several offices write about the same problem, the platform notices."}
+            </div>
+            <div className="clusters-grid" style={{ marginTop: 6 }}>
+              {grid.map((c) => (
+                <div key={c.i} className={`node ${c.cluster ? "cluster" : c.active ? "active" : ""}`}></div>
+              ))}
+            </div>
+            <div className="flex between center small">
+              <span className="mono tiny muted">THRESHOLD</span>
+              <span className="mono tiny" style={{ color: fires ? "var(--copper)" : "var(--ink-soft)" }}>
+                {fires ? "FIRES" : "below"}
+              </span>
+            </div>
+            <input
+              type="range"
+              className="chart-slider"
+              min="1" max="3" step="1"
+              value={threshold}
+              onChange={(e) => setThreshold(Number(e.target.value))}
+            />
+            <div className="tiny muted mono">slide to raise threshold ({threshold} × distinct offices)</div>
+          </div>
+
+          {/* Arrow 1 */}
+          <div className="col center" style={{ alignItems: "center", justifyContent: "center" }}>
+            <svg viewBox="0 0 60 40" width="60" height="40">
+              <line x1="0" y1="20" x2="50" y2="20" stroke="var(--ink)" strokeWidth="1" strokeDasharray="2 3" className={fires ? "" : "paused"} />
+              <polygon points="50,14 60,20 50,26" fill="var(--ink)" opacity={fires ? 1 : 0.3} />
+            </svg>
+            <div className="tiny mono muted" style={{ marginTop: 4 }}>flag</div>
+          </div>
+
+          {/* Step 2: Initiator review */}
+          <div className="col gap-12">
+            <div className="eyebrow">② INITIATOR</div>
+            <div className="small muted">
+              {register === "academic"
+                ? "Human judgment translates a detected pattern into a strategically framed challenge."
+                : "A PD manager or regional lead reviews the cluster and decides if it's worth a challenge."}
+            </div>
+            <div className="card" style={{ padding: 14, background: "rgba(255,252,245,0.85)" }}>
+              <div className="mono tiny muted" style={{ letterSpacing: 1.4 }}>CLUSTER · 14 artefacts · 5 offices</div>
+              <div className="display" style={{ fontSize: 16, marginTop: 4 }}>Cross-border pharmaceutical documentation delays</div>
+              <div className="flex wrap gap-6" style={{ marginTop: 8 }}>
+                <span className="tag"><span className="swatch" style={{ background: "var(--copper)" }}></span>perth, sgp, akl, ham, dxb</span>
+                <span className="tag"><span className="swatch" style={{ background: "var(--signal)" }}></span>q1-q2 2026</span>
+              </div>
+              <div className="flex gap-8" style={{ marginTop: 10 }}>
+                <button className="btn solid small" disabled={!fires} style={{ opacity: fires ? 1 : 0.4 }}>Launch HMW</button>
+                <button className="btn ghost small">Defer</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Arrow 2 */}
+          <div className="col center" style={{ alignItems: "center", justifyContent: "center" }}>
+            <svg viewBox="0 0 60 40" width="60" height="40">
+              <line x1="0" y1="20" x2="50" y2="20" stroke="var(--copper)" strokeWidth="1" strokeDasharray="2 3" className={fires ? "" : "paused"} />
+              <polygon points="50,14 60,20 50,26" fill="var(--copper)" opacity={fires ? 1 : 0.3} />
+            </svg>
+            <div className="tiny mono muted" style={{ marginTop: 4, color: "var(--copper)" }}>launch</div>
+          </div>
+
+          {/* Step 3: HMW Challenge */}
+          <div className="col gap-12">
+            <div className="eyebrow">③ HOW MIGHT WE</div>
+            <div className="small muted">
+              {register === "academic"
+                ? "Goal-driven idea campaign in the innovation management platform, evidence-linked to the originating cluster."
+                : "An open challenge launches with the cluster as its evidence base; people across the network contribute."}
+            </div>
+            <div className="card" style={{ padding: 14, background: "rgba(31,111,123,0.06)", borderColor: "var(--marine)" }}>
+              <div className="mono tiny" style={{ letterSpacing: 1.4, color: "var(--marine)" }}>OPEN CAMPAIGN · 21d</div>
+              <div className="display" style={{ fontSize: 16, marginTop: 4 }}>
+                How might we standardise cross-border pharma handover to remove documentation delay?
+              </div>
+              <div className="flex gap-12" style={{ marginTop: 10 }}>
+                <div>
+                  <div className="mono tiny muted">CONTRIBUTORS</div>
+                  <div className="display" style={{ fontSize: 18 }}>{fires ? 31 : 4}</div>
+                </div>
+                <div>
+                  <div className="mono tiny muted">IDEAS</div>
+                  <div className="display" style={{ fontSize: 18 }}>{fires ? 12 : 1}</div>
+                </div>
+                <div>
+                  <div className="mono tiny muted">COHORTS</div>
+                  <div className="display" style={{ fontSize: 18 }}>{fires ? 4 : 1}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ───────────────────────── ACQUISITION CYCLES / FLYWHEEL ─────────────────────────
+function AcquisitionSlider({ cycle, setCycle }) {
+  return (
+    <div className="card" style={{ padding: 22 }}>
+      <div className="corner tl"></div><div className="corner tr"></div>
+      <div className="corner bl"></div><div className="corner br"></div>
+
+      <div className="flex between center wrap gap-16">
+        <div>
+          <div className="eyebrow">Acquisition cohorts over time</div>
+          <div className="display" style={{ fontSize: 20, marginTop: 4 }}>Each revolution raises the organisational baseline.</div>
+        </div>
+        <div className="flex center gap-12">
+          <span className="mono tiny muted">t<sub>0</sub></span>
+          <input type="range" min="0" max="5" step="1" value={cycle} onChange={(e) => setCycle(Number(e.target.value))} className="chart-slider" style={{ width: 260 }} />
+          <span className="mono tiny muted">t<sub>5</sub></span>
+          <span className="chip"><span className="dot" style={{ background: "var(--copper)" }}></span>t{cycle}</span>
+        </div>
+      </div>
+
+      <Baseline cycle={cycle} />
+
+      <div className="flex wrap gap-16" style={{ marginTop: 12 }}>
+        {[
+          { label: "Knowledge base depth", v: 12 + cycle * 16 },
+          { label: "Cross-cohort participation", v: 8 + cycle * 18 },
+          { label: "Innovation pipeline maturity", v: 6 + cycle * 17 },
+          { label: "Cultural coherence", v: 14 + cycle * 14 },
+        ].map((m) => (
+          <div key={m.label} className="col gap-4" style={{ flex: "1 1 180px" }}>
+            <div className="flex between center">
+              <div className="small muted">{m.label}</div>
+              <div className="mono tiny" style={{ color: "var(--ink)" }}>{Math.min(100, m.v)}</div>
+            </div>
+            <div style={{ height: 4, background: "rgba(14,42,71,0.1)", borderRadius: 999, overflow: "hidden" }}>
+              <div style={{ width: `${Math.min(100, m.v)}%`, height: "100%", background: "linear-gradient(90deg, var(--marine), var(--copper))" }}></div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* v2.0 — compounding-time / competitive-advantage framing per v5 §8.2.
+          Each layer-specific single-loop + the cross-cutting double-loop all
+          accumulate over cycles, producing organisational self-knowledge that is
+          path-dependent and hard to replicate. */}
+      <div className="flex wrap center gap-8" style={{ marginTop: 18, paddingTop: 14, borderTop: "1px solid var(--rule-soft)" }}>
+        <span className="chip"><span className="dot" style={{ background: "var(--marine)" }}></span>compounding by design</span>
+        <span className="chip"><span className="dot" style={{ background: "var(--copper)" }}></span>path-dependent</span>
+        <span className="chip"><span className="dot" style={{ background: "var(--copper)" }}></span>hard to replicate</span>
+        <span className="chip"><span className="dot" style={{ background: "var(--signal)" }}></span>cannot be purchased or shortcut</span>
+        <div className="small muted" style={{ flex: "1 1 220px", minWidth: 220 }}>
+          Artefact specs, cluster rules, innovation-pipeline sophistication, and cohort-level integration intelligence all accumulate. Time is a compounding factor, not just a dimension — and the longer the system runs, the harder it is for anyone else to catch up. <span className="mono tiny muted">(v5 §8.2)</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Baseline rising chart — small inline SVG
+function Baseline({ cycle }) {
+  const W = 900, H = 110;
+  const pad = 12;
+  const xs = Array.from({ length: 6 }, (_, i) => pad + i * ((W - pad * 2) / 5));
+  const baseline = [82, 74, 66, 58, 50, 42]; // y values descend = baseline rising
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} style={{ marginTop: 12 }}>
+      {/* Bands */}
+      <rect x="0" y="0" width={W} height={H} fill="none" stroke="var(--rule-soft)" />
+      {/* Tipping band */}
+      <rect x="0" y="6" width={W} height="14" fill="var(--copper-tint)" />
+      <text x="6" y="18" fontFamily="var(--mono)" fontSize="9" letterSpacing="1.2" fill="var(--copper)">PIPPARD'S LADDER · TIPPING THRESHOLD</text>
+
+      {/* Baseline curve */}
+      <path
+        d={`M ${xs[0]} ${baseline[0]} ${xs.map((x, i) => `L ${x} ${baseline[i]}`).join(" ")}`}
+        fill="none" stroke="var(--marine)" strokeWidth="1.6"
+      />
+      {/* Filled area */}
+      <path
+        d={`M ${xs[0]} ${baseline[0]} ${xs.map((x, i) => `L ${x} ${baseline[i]}`).join(" ")} L ${xs[5]} ${H} L ${xs[0]} ${H} Z`}
+        fill="var(--teal-tint)"
+      />
+      {/* Cycle markers */}
+      {xs.map((x, i) => (
+        <g key={i}>
+          <line x1={x} y1={baseline[i]} x2={x} y2={H - 4} stroke="var(--rule)" strokeWidth="0.6" />
+          <circle cx={x} cy={baseline[i]} r={i === cycle ? 5 : 3} fill={i === cycle ? "var(--copper)" : "var(--marine)"} stroke="var(--paper)" strokeWidth="1" />
+          <text x={x} y={H - 2} textAnchor="middle" fontFamily="var(--mono)" fontSize="9" fill="var(--ink-soft)">t{i}</text>
+        </g>
+      ))}
+      <text x={W - 6} y={baseline[5] - 6} textAnchor="end" fontFamily="var(--mono)" fontSize="9" fill="var(--marine)" letterSpacing="1.2">
+        ORG. BASELINE → EXTEND
+      </text>
+    </svg>
+  );
+}
+
+// ───────────────────────── INNOVATION FLYWHEEL (NESTED) ─────────────────────────
+function Flywheel() {
+  const [stage, setStage] = useStateMech(0);
+  const stages = [
+    { key: "Collect", desc: "Goal-driven HMW campaign, prompted by a Layer 2 cluster.", color: "var(--marine)" },
+    { key: "Engage", desc: "Cross-cohort contribution — Beretta's (2018) functional diversity premium.", color: "var(--ink-2)" },
+    { key: "Manage", desc: "Phase-gated evaluation with reasoned, transparent feedback.", color: "var(--copper)" },
+    { key: "Measure", desc: "Impact tracked back to the originating practitioner insight.", color: "var(--signal)" },
+  ];
+
+  // Auto-rotate
+  React.useEffect(() => {
+    const id = setInterval(() => setStage((s) => (s + 1) % 4), 2600);
+    return () => clearInterval(id);
+  }, []);
+
+  const cx = 130, cy = 130, r = 86;
+  return (
+    <div className="card" style={{ padding: 28 }}>
+      <div className="corner tl"></div><div className="corner tr"></div>
+      <div className="corner bl"></div><div className="corner br"></div>
+      <div className="eyebrow">Nested flywheel — within Layer 3</div>
+      <h3 className="display" style={{ marginTop: 6 }}>Two sources of momentum.</h3>
+      <p className="small muted" style={{ marginTop: 6, maxWidth: 640 }}>
+        The framework-level cycle builds capacity across acquisition cycles. The innovation-level cycle builds innovation capability within each cycle. The system has two flywheels turning at different scales.
+      </p>
+
+      <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 28, marginTop: 16, alignItems: "center" }}>
+        <svg viewBox="0 0 260 260" width="260" height="260">
+          <circle cx={cx} cy={cy} r={r + 18} fill="none" stroke="var(--rule)" strokeWidth="0.8" strokeDasharray="2 4" />
+          <circle cx={cx} cy={cy} r={r} fill="none" stroke="var(--ink)" strokeWidth="0.9" />
+          {stages.map((s, i) => {
+            const angle = (i / 4) * Math.PI * 2 - Math.PI / 2;
+            const x = cx + Math.cos(angle) * r;
+            const y = cy + Math.sin(angle) * r;
+            const active = i === stage;
+            return (
+              <g key={s.key} onMouseEnter={() => setStage(i)}>
+                <circle cx={x} cy={y} r={active ? 22 : 16} fill={active ? s.color : "var(--paper)"} stroke={s.color} strokeWidth={active ? 0 : 1.2} />
+                <text x={x} y={y + 4} textAnchor="middle" fontFamily="var(--mono)" fontSize="10" fill={active ? "var(--paper)" : "var(--ink)"} letterSpacing="1.4">
+                  {s.key.toUpperCase()}
+                </text>
+              </g>
+            );
+          })}
+          {/* arrow on circle */}
+          <path d={`M ${cx + r} ${cy - 6} l 10 6 l -10 6 z`} fill="var(--ink)" />
+        </svg>
+        <div className="col gap-8">
+          <div className="eyebrow" style={{ color: stages[stage].color }}>{stages[stage].key.toUpperCase()}</div>
+          <p>{stages[stage].desc}</p>
+          <div className="flex gap-6 wrap" style={{ marginTop: 8 }}>
+            {stages.map((s, i) => (
+              <button key={s.key} className={`btn ghost small ${i === stage ? "solid" : ""}`} onClick={() => setStage(i)}>
+                {s.key}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Export
+Object.assign(window, { StationDetail, TripleDuty, FourOutcomes, AutomationPipeline, AcquisitionSlider, Flywheel, ReflectionArchitecture });
+
+  </script>
+
+  <script type="text/babel" data-presets="env,react">
+/* global React, ReactDOM, HeroFlow, StationDetail, TripleDuty, FourOutcomes, AutomationPipeline, AcquisitionSlider, Flywheel, ReflectionArchitecture, useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakToggle, TweakSelect */
+// app.jsx — root composition
+
+const { useState, useEffect, useMemo } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "register": "layered",
+  "overlay_seci": false,
+  "overlay_maynard": false,
+  "overlay_roles": false,
+  "aesthetic": "chart",
+  "playing": true
+}/*EDITMODE-END*/;
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [selected, setSelected] = useState(null);
+  const [cycle, setCycle] = useState(2);
+
+  // Apply aesthetic variant to body class
+  useEffect(() => {
+    document.body.className = `variant-${t.aesthetic}`;
+  }, [t.aesthetic]);
+
+  const overlays = {
+    seci: t.overlay_seci,
+    maynard: t.overlay_maynard,
+    roles: t.overlay_roles,
+  };
+
+  return (
+    <div className="chart-paper" style={{ minHeight: "100vh" }}>
+      {/* Header */}
+      <header className="shell section" style={{ paddingTop: 56, paddingBottom: 48, position: "relative" }}>
+        <span className="frame-cross" style={{ top: 24, left: 24 }}></span>
+        <span className="frame-cross" style={{ top: 24, right: 24 }}></span>
+
+        <div className="flex between center wrap gap-16" style={{ marginBottom: 28 }}>
+          <div className="flex center gap-12">
+            <span className="chip"><span className="dot"></span>BUS922 · CONCEPT v6 · v2.1</span>
+            <span className="coord">23 MAY 2026 · 14°S / 142°E</span>
+          </div>
+          <div className="flex center gap-12">
+            <span className="eyebrow">Language register</span>
+            <div className="register-switch">
+              {["plain", "layered", "academic"].map((r) => (
+                <button key={r} className={t.register === r ? "on" : ""} onClick={() => setTweak("register", r)}>{r}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <h1 className="display" style={{ maxWidth: 1100 }}>
+          Navigating workforce transitions of serial acquisition.
+        </h1>
+        <p className="display" style={{ fontStyle: "italic", color: "var(--ink-soft)", fontSize: "clamp(20px, 2.2vw, 30px)", marginTop: 14, maxWidth: 980 }}>
+          A self-reinforcing professional development framework for building capability, culture, and innovation — a case study of an industry partner.
+        </p>
+
+        <div className="flex wrap gap-24" style={{ marginTop: 28 }}>
+          <Stat label="Platform layers" v="3" sub="Learn · Share · Innovate" />
+          <Stat label="Flywheels" v="2" sub="framework · innovation (nested)" />
+          <Stat label="Design principles" v="4" sub="quadruple-duty · guardrails · contribution · legibility" />
+          <Stat label="Retained literature" v="~118" sub="SECI (integrating) · andragogy · org. socialisation · EDI · AC (bridge) · Maynard (lens)" />
+        </div>
+
+        <p style={{ marginTop: 28, maxWidth: 780, color: "var(--ink-soft)" }}>
+          This visualisation models the platform architecture and the knowledge that flows through it. Click any station on the chart to read what happens there. Scrub time forward to see the organisational baseline rise.
+        </p>
+      </header>
+
+      {/* HERO FLOW */}
+      <section className="shell" style={{ paddingBottom: 24 }}>
+        <div className="flex between center wrap gap-16" style={{ marginBottom: 12 }}>
+          <span className="eyebrow">Knowledge flow — three platforms, one shipping lane</span>
+          <div className="flex center gap-12">
+            <button className="btn ghost small" onClick={() => setTweak("playing", !t.playing)}>
+              {t.playing ? "❚❚ pause flow" : "▶ play flow"}
+            </button>
+            <div className="flex center gap-8">
+              <span className="mono tiny muted">overlays:</span>
+              {[
+                { k: "overlay_seci", l: "SECI" },
+                { k: "overlay_maynard", l: "Maynard" },
+                { k: "overlay_roles", l: "Roles" },
+              ].map((o) => (
+                <button
+                  key={o.k}
+                  className={`overlay-tag ${o.k === "overlay_seci" ? "overlay-seci" : o.k === "overlay_maynard" ? "overlay-maynard" : "overlay-roles"}`}
+                  style={{ background: t[o.k] ? "currentColor" : "transparent", cursor: "pointer" }}
+                  onClick={() => setTweak(o.k, !t[o.k])}
+                >
+                  <span style={{ color: t[o.k] ? "var(--paper)" : "currentColor" }}>{o.l}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ position: "relative", border: "1px solid var(--rule)", borderRadius: 6, background: "rgba(255,252,245,0.4)", padding: 8 }}>
+          <HeroFlow
+            selected={selected}
+            setSelected={setSelected}
+            overlays={overlays}
+            playing={t.playing}
+            cycle={cycle}
+          />
+        </div>
+
+        {/* Station detail under the flow */}
+        {selected && (
+          <div style={{ marginTop: 16 }}>
+            <StationDetail which={selected} register={t.register} onClose={() => setSelected(null)} />
+          </div>
+        )}
+      </section>
+
+      {/* Acquisition cycles / baseline */}
+      <section className="shell" style={{ paddingTop: 56, paddingBottom: 32 }}>
+        <AcquisitionSlider cycle={cycle} setCycle={setCycle} />
+      </section>
+
+      {/* REFLECTION ARCHITECTURE (v2.0 — marquee structural addition) */}
+      <section className="shell section">
+        <ReflectionArchitecture register={t.register} />
+      </section>
+
+      {/* QUADRUPLE-DUTY METADATA (v2.0 — fourth duty: cohort metadata for double-loop) */}
+      <section className="shell section">
+        <TripleDuty register={t.register} />
+      </section>
+
+      {/* FOUR OUTCOMES */}
+      <section className="shell section">
+        <FourOutcomes register={t.register} />
+      </section>
+
+      {/* AUTOMATION PIPELINE */}
+      <section className="shell section">
+        <AutomationPipeline register={t.register} />
+      </section>
+
+      {/* NESTED FLYWHEEL */}
+      <section className="shell section">
+        <Flywheel />
+      </section>
+
+      {/* INTEGRATED PROPOSITION */}
+      <section className="shell section">
+        <div className="flex between wrap gap-32">
+          <div style={{ flex: "1 1 360px", maxWidth: 480 }}>
+            <div className="eyebrow">Integrated proposition</div>
+            <h2 className="display" style={{ marginTop: 8 }}>
+              Contribution is the mechanism of belonging.
+            </h2>
+            <p style={{ marginTop: 14, color: "var(--ink-soft)" }}>
+              The framework inverts the direction of knowledge flow. Traditional L&D flows from institution to individual. This framework flows from individual to organisation: real operational challenges become the raw material of professional development; outputs publish to the network with structured metadata; clusters emerge organically; innovation campaigns convert clusters into action.
+            </p>
+            <p style={{ marginTop: 8, color: "var(--ink-soft)" }}>
+              Acquired employees do not have to choose between retaining their professional identity and integrating into the partner's culture. The structure makes those the same action.
+            </p>
+          </div>
+
+          <div className="card" style={{ flex: "1 1 360px", maxWidth: 620, padding: 28 }}>
+            <div className="corner tl"></div><div className="corner tr"></div>
+            <div className="corner bl"></div><div className="corner br"></div>
+            <div className="eyebrow">Framework architecture · v6 §6.1</div>
+            <h3 className="display" style={{ marginTop: 6, fontSize: 22, lineHeight: 1.15 }}>
+              One integrating theory, three layer cores, one bridge, one lens.
+            </h3>
+            <p className="small muted" style={{ marginTop: 8 }}>
+              v5's structural promotion, carried into v6: SECI carries the spine; layer-specific theories govern within each layer; absorptive capacity bridges M&amp;A ↔ KM without occupying a core slot; Maynard's transition framework rides alongside as a supplementary analytical lens. v6 elevates &ldquo;contribution is the mechanism of belonging&rdquo; to a named design principle.
+            </p>
+            <ul style={{ margin: "16px 0 0", padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
+              {[
+                { role: "Integrating theory", theory: "SECI (Nonaka & Takeuchi)", fn: "Knowledge conversion across all three layers — externalisation, combination, internalisation/socialisation. The spine that makes the three layers a system, not a list.", color: "var(--marine)", gov: "" },
+                { role: "Layer 1 core",       theory: "Andragogy (Knowles)",     fn: "Design authority for artefact specs, activity design, scaffolding, GenAI interaction patterns.", color: "var(--marine)", gov: "PD Manager owns artefact specs + curated prompt library" },
+                { role: "Layer 2 core",       theory: "Org. socialisation (Bauer et al.)", fn: "Cultural integration through belonging-by-contribution; CoP identification through participation.", color: "var(--copper)", gov: "PD Manager + leadership + broad-role players own the cluster rule library" },
+                { role: "Cross-cutting",      theory: "AMO (Appelbaum et al.)",  fn: "Ability · motivation · opportunity conditions across all three layers.", color: "var(--ink-soft)", gov: "" },
+                { role: "Layer 3 core",       theory: "EDI",                     fn: "Employee-driven innovation through structured idea development on the innovation management platform.", color: "var(--signal)", gov: "Platform-provided stage-gate governance; role assignment is recommendation-level" },
+                { role: "Bridge concept",     theory: "Absorptive capacity (Cohen & Levinthal)", fn: "Explains why the self-reinforcing mechanism compounds; connects M&A integration ↔ KM. Bridge — not core — to avoid defending full SME operationalisation of a large-firm construct.", color: "var(--ink-2)", gov: "" },
+                { role: "Supplementary lens", theory: "Maynard (2015a, 2020, 2024a, 2024b)", fn: "Two contributions, kept distinct (v6 §5.9): (1) tipping-point logic — Pippard's Ladder, grounded in Maynard's 2015a peer-reviewed risk-innovation work and Scheffer et al. (2012) — the motivational 'why preventive'; (2) threat–opportunity mapping (2024a/b) — the analytical transition-landscape tool. A peer-reviewed concept extended through practitioner thought leadership; analytical tool, not a theoretical pillar.", color: "var(--copper)", gov: "" },
+              ].map((row) => (
+                <li key={row.role} style={{ display: "grid", gridTemplateColumns: "128px 1fr", gap: 12, borderBottom: "1px solid var(--rule-soft)", paddingBottom: 8 }}>
+                  <span className="mono tiny" style={{ letterSpacing: 1.4, color: row.color, alignSelf: "start" }}>{row.role.toUpperCase()}</span>
+                  <div style={{ minWidth: 0 }}>
+                    <div className="small" style={{ fontWeight: 500 }}>{row.theory}</div>
+                    <div className="tiny muted" style={{ marginTop: 2 }}>{row.fn}</div>
+                    {row.gov && (
+                      <div className="tiny mono" style={{ marginTop: 4, color: "var(--copper)", letterSpacing: 0.6 }}>
+                        gov · {row.gov}
+                      </div>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <div className="tiny mono muted" style={{ marginTop: 12, letterSpacing: 0.6 }}>
+              Governance notes drawn from v6 §8.1. Carried-forward decisions (title refinement, searches D4 + D5) live in the project MANIFEST.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="shell footer">
+        <div className="flex between center wrap gap-16">
+          <span>BUS922 · Kali Madden · Trimester 2, 2026 · Industry Partner</span>
+          <span>visualisation v2.1 · v6 reconciliation · SECI spine · reflection architecture · quadruple-duty metadata · Maynard bifurcation · framework table</span>
+        </div>
+      </footer>
+
+      {/* Tweaks panel */}
+      <TweaksPanel>
+        <TweakSection label="Language register" />
+        <TweakRadio
+          label="Labels"
+          value={t.register}
+          options={["plain", "layered", "academic"]}
+          onChange={(v) => setTweak("register", v)}
+        />
+
+        <TweakSection label="Theoretical overlays" />
+        <TweakToggle label="SECI per-station labels" value={t.overlay_seci} onChange={(v) => setTweak("overlay_seci", v)} />
+        <TweakToggle label="Maynard threat–opportunity" value={t.overlay_maynard} onChange={(v) => setTweak("overlay_maynard", v)} />
+        <TweakToggle label="Innovation flywheel roles" value={t.overlay_roles} onChange={(v) => setTweak("overlay_roles", v)} />
+
+        <TweakSection label="Aesthetic" />
+        <TweakRadio
+          label="Variant"
+          value={t.aesthetic}
+          options={["chart", "editorial", "contemporary"]}
+          onChange={(v) => setTweak("aesthetic", v)}
+        />
+
+        <TweakSection label="Animation" />
+        <TweakToggle label="Animate flow" value={t.playing} onChange={(v) => setTweak("playing", v)} />
+      </TweaksPanel>
+    </div>
+  );
+}
+
+function Stat({ label, v, sub }) {
+  return (
+    <div className="col gap-4" style={{ minWidth: 140 }}>
+      <div className="eyebrow">{label}</div>
+      <div className="display" style={{ fontSize: 38, lineHeight: 1 }}>{v}</div>
+      <div className="small muted">{sub}</div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+  </script>
+</body>
+</html>

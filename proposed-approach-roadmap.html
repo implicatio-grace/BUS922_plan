@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BUS922 A3 · Proposed approach — roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f5f1;--paper:#fbfaf6;--ink:#1c1c1a;--ink-2:#3b3a36;--muted:#7a7872;--muted-2:#9a9890;
+    --line:#d8d4ca;--line-2:#bdb8aa;
+    --grey:#5F5E5A;--grey-fill:#F1EFE8;
+    --teal:#0F6E56;--teal-fill:#E1F5EE;
+    --coral:#993C1D;--coral-fill:#FAECE7;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-feature-settings:"ss01","cv11";-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1000px;margin:0 auto;padding:56px 32px 88px;}
+  .back{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:11px;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:30px;}
+  .back:hover{color:var(--ink);}
+  .eyebrow{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:11px;
+    text-transform:uppercase;letter-spacing:0.16em;color:var(--coral);}
+  h1{font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:34px;line-height:1.12;
+    letter-spacing:-0.015em;margin:14px 0 0;text-wrap:balance;}
+  .lede{color:var(--muted);font-size:14.5px;line-height:1.65;max-width:62ch;margin:16px 0 0;}
+
+  .legend{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 6px;align-items:center;}
+  .mchip{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:11px;letter-spacing:0.04em;
+    padding:6px 11px;border-radius:7px;border:1px solid var(--line-2);background:var(--paper);
+    display:inline-flex;gap:8px;align-items:center;color:var(--ink-2);}
+  .mchip b{font-weight:500;color:var(--ink);}
+  .mchip .d{width:8px;height:8px;border-radius:50%;}
+  .legend .note{font-size:12px;color:var(--muted-2);font-style:italic;}
+
+  .figwrap{margin:14px 0 0;background:var(--paper);border:1px solid var(--line);border-radius:14px;
+    padding:20px 16px;overflow-x:auto;}
+  svg{display:block;margin:0 auto;max-width:100%;height:auto;}
+
+  .reg{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:0.12em;
+    text-transform:uppercase;fill:var(--muted);}
+  .th{font-family:"Fraunces",Georgia,serif;font-size:15px;}
+  .ts{font-family:"Inter",sans-serif;font-size:11.5px;}
+  .chip{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.03em;}
+  .arr{stroke:#73726C;stroke-width:1.4;fill:none;}
+
+  .honest{margin-top:30px;background:var(--paper);border:1px solid var(--line);
+    border-left:3px solid var(--coral);border-radius:0 10px 10px 0;padding:18px 22px;max-width:72ch;}
+  .honest .h{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:0.1em;
+    text-transform:uppercase;color:var(--coral);}
+  .honest p{font-size:13.5px;line-height:1.65;color:var(--ink-2);margin:8px 0 0;}
+  .honest p em{color:var(--muted);}
+
+  .foot{margin-top:40px;font-family:"JetBrains Mono",monospace;font-size:10.5px;
+    text-transform:uppercase;letter-spacing:0.1em;color:var(--muted-2);line-height:1.9;}
+  @media print{html,body{background:#fff;} .figwrap,.honest{break-inside:avoid;} .back{display:none;}}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="index.html">&larr; Index</a>
+    <div class="eyebrow">BUS922 A3 · The map</div>
+    <h1>The proposed approach &mdash; what lands when</h1>
+    <p class="lede">One arc, read top to bottom: the three business instruments funnel into a strategic hinge, which hands off to the four design principles, with two more trailing as out-of-scope direction. The milestone chips on the right show <em>where each piece lands</em> across the submissions — this is the proposed&nbsp;&rarr;&nbsp;delivered line you're being asked to approve.</p>
+
+    <div class="legend">
+      <span class="mchip"><span class="d" style="background:var(--grey)"></span><b>&rarr; A1B</b> committed · 28 Jun</span>
+      <span class="mchip"><span class="d" style="background:var(--coral)"></span><b>&rarr; A2</b> preview</span>
+      <span class="mchip"><span class="d" style="background:var(--teal)"></span><b>&rarr; A3</b> built · evidenced</span>
+      <span class="note">solid = in scope · dashed = post-A3, informing-not-formal</span>
+    </div>
+
+    <div class="figwrap">
+      <svg viewBox="0 0 760 640" role="img" aria-label="Proposed-approach roadmap: problem funnel to TOWS hinge to DP1–DP4 pipeline to post-A3 band, with submission milestones.">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#73726C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </marker>
+        </defs>
+
+        <!-- milestone gutter guide -->
+        <text class="reg" x="660" y="30" text-anchor="middle">Lands at</text>
+
+        <!-- PROBLEM REGISTER -->
+        <text class="reg" x="40" y="30">Problem register — grey / industry sources</text>
+
+        <g>
+          <rect x="40" y="42" width="158" height="50" rx="8" fill="var(--grey-fill)" stroke="var(--grey)" stroke-width="0.6"></rect>
+          <text class="th" x="119" y="62" fill="#2C2C2A" text-anchor="middle">PESTEL</text>
+          <text class="ts" x="119" y="80" fill="var(--grey)" text-anchor="middle">macro context</text>
+        </g>
+        <g>
+          <rect x="222" y="42" width="158" height="50" rx="8" fill="var(--grey-fill)" stroke="var(--grey)" stroke-width="0.6"></rect>
+          <text class="th" x="301" y="62" fill="#2C2C2A" text-anchor="middle">Five Forces</text>
+          <text class="ts" x="301" y="80" fill="var(--grey)" text-anchor="middle">industry context</text>
+        </g>
+        <g>
+          <rect x="404" y="42" width="158" height="50" rx="8" fill="var(--grey-fill)" stroke="var(--grey)" stroke-width="0.6"></rect>
+          <text class="th" x="483" y="62" fill="#2C2C2A" text-anchor="middle">VRIO</text>
+          <text class="ts" x="483" y="80" fill="var(--grey)" text-anchor="middle">firm · the missing &#34;O&#34;</text>
+        </g>
+        <!-- milestone chip A1B for instruments -->
+        <g transform="translate(610,52)">
+          <rect x="0" y="0" width="100" height="30" rx="7" fill="#fff" stroke="var(--grey)" stroke-width="0.8"></rect>
+          <circle cx="13" cy="15" r="4" fill="var(--grey)"></circle>
+          <text class="chip" x="24" y="19" fill="#2C2C2A">&rarr; A1B</text>
+        </g>
+
+        <line x1="119" y1="94" x2="290" y2="118" class="arr" marker-end="url(#arrow)"></line>
+        <line x1="301" y1="94" x2="301" y2="118" class="arr" marker-end="url(#arrow)"></line>
+        <line x1="483" y1="94" x2="312" y2="118" class="arr" marker-end="url(#arrow)"></line>
+
+        <!-- HINGE -->
+        <g>
+          <rect x="151" y="122" width="300" height="56" rx="8" fill="var(--coral-fill)" stroke="var(--coral)" stroke-width="1.1"></rect>
+          <text class="th" x="301" y="142" fill="#4A1B0C" text-anchor="middle">TOWS synthesis — the hinge</text>
+          <text class="ts" x="301" y="162" fill="#712B13" text-anchor="middle">W&times;O: learning not retained &times; GenAI by-product</text>
+        </g>
+        <g transform="translate(595,134)">
+          <rect x="0" y="0" width="130" height="30" rx="7" fill="#fff" stroke="var(--coral)" stroke-width="0.9"></rect>
+          <circle cx="13" cy="15" r="4" fill="var(--coral)"></circle>
+          <text class="chip" x="24" y="19" fill="#712B13">&rarr; A2 · A3</text>
+        </g>
+
+        <line x1="301" y1="180" x2="301" y2="202" class="arr" marker-end="url(#arrow)"></line>
+
+        <!-- DESIGN REGISTER -->
+        <text class="reg" x="151" y="198">Design register — journal-warranted literature</text>
+
+        <g>
+          <rect x="151" y="204" width="300" height="48" rx="8" fill="var(--teal-fill)" stroke="var(--teal)" stroke-width="0.6"></rect>
+          <text class="th" x="301" y="223" fill="#04342C" text-anchor="middle">DP1 · authentic problem</text>
+          <text class="ts" x="301" y="240" fill="var(--teal)" text-anchor="middle">the raw material (andragogy)</text>
+        </g>
+        <line x1="301" y1="252" x2="301" y2="268" class="arr" marker-end="url(#arrow)"></line>
+
+        <g>
+          <rect x="151" y="270" width="300" height="48" rx="8" fill="var(--teal-fill)" stroke="var(--teal)" stroke-width="0.6"></rect>
+          <text class="th" x="301" y="289" fill="#04342C" text-anchor="middle">DP2 · generative articulation</text>
+          <text class="ts" x="301" y="306" fill="var(--teal)" text-anchor="middle">generate = learn + artefact</text>
+        </g>
+        <line x1="301" y1="318" x2="301" y2="334" class="arr" marker-end="url(#arrow)"></line>
+
+        <g>
+          <rect x="151" y="336" width="300" height="48" rx="8" fill="var(--teal-fill)" stroke="var(--teal)" stroke-width="1.6"></rect>
+          <text class="th" x="301" y="355" fill="#04342C" text-anchor="middle">DP3 · template structuring</text>
+          <text class="ts" x="301" y="372" fill="var(--teal)" text-anchor="middle">headline contribution</text>
+        </g>
+        <line x1="301" y1="384" x2="301" y2="400" class="arr" marker-end="url(#arrow)"></line>
+
+        <g>
+          <rect x="151" y="402" width="300" height="48" rx="8" fill="var(--teal-fill)" stroke="var(--teal)" stroke-width="0.6"></rect>
+          <text class="th" x="301" y="421" fill="#04342C" text-anchor="middle">DP4 · context-rich intermediate</text>
+          <text class="ts" x="301" y="438" fill="var(--teal)" text-anchor="middle">ready for downstream reuse</text>
+        </g>
+
+        <!-- two-state milestone bracket for the pipeline -->
+        <g transform="translate(595,210)">
+          <line x1="6" y1="0" x2="6" y2="240" stroke="var(--line-2)" stroke-width="1"></line>
+          <rect x="0" y="6" width="148" height="30" rx="7" fill="#fff" stroke="var(--grey)" stroke-width="0.8" stroke-dasharray="3 2"></rect>
+          <circle cx="13" cy="21" r="4" fill="var(--grey)"></circle>
+          <text class="chip" x="24" y="25" fill="#2C2C2A">&rarr; A1B proposed</text>
+          <rect x="0" y="204" width="148" height="30" rx="7" fill="#fff" stroke="var(--teal)" stroke-width="0.9"></rect>
+          <circle cx="13" cy="219" r="4" fill="var(--teal)"></circle>
+          <text class="chip" x="24" y="223" fill="#04342C">&rarr; A3 delivered</text>
+        </g>
+
+        <line x1="301" y1="450" x2="301" y2="468" class="arr" marker-end="url(#arrow)" stroke-dasharray="4 3"></line>
+
+        <!-- POST-A3 BAND -->
+        <g>
+          <rect x="91" y="470" width="420" height="50" rx="8" fill="var(--grey-fill)" stroke="var(--grey)" stroke-width="0.6" stroke-dasharray="4 3"></rect>
+          <text class="th" x="301" y="489" fill="#2C2C2A" text-anchor="middle">DP5 disclosure-trust · DP6 multimodal</text>
+          <text class="ts" x="301" y="507" fill="var(--grey)" text-anchor="middle">informing-not-formal · post-A3</text>
+        </g>
+        <g transform="translate(595,480)">
+          <rect x="0" y="0" width="130" height="30" rx="7" fill="#fff" stroke="var(--grey)" stroke-width="0.8" stroke-dasharray="3 2"></rect>
+          <circle cx="13" cy="15" r="4" fill="none" stroke="var(--grey)" stroke-width="1.4"></circle>
+          <text class="chip" x="24" y="19" fill="var(--grey)">post-A3</text>
+        </g>
+
+        <!-- key -->
+        <g transform="translate(40,560)">
+          <rect x="0" y="0" width="12" height="12" rx="3" fill="var(--grey-fill)" stroke="var(--grey)" stroke-width="0.6"></rect>
+          <text class="ts" x="18" y="10" fill="var(--muted)">problem · grey sources</text>
+          <rect x="200" y="0" width="12" height="12" rx="3" fill="var(--teal-fill)" stroke="var(--teal)" stroke-width="0.6"></rect>
+          <text class="ts" x="218" y="10" fill="var(--muted)">design · journal-warranted</text>
+          <rect x="420" y="0" width="12" height="12" rx="3" fill="var(--coral-fill)" stroke="var(--coral)" stroke-width="1"></rect>
+          <text class="ts" x="438" y="10" fill="var(--muted)">the hinge</text>
+          <rect x="520" y="0" width="12" height="12" rx="3" fill="var(--grey-fill)" stroke="var(--grey)" stroke-width="0.6" stroke-dasharray="3 2"></rect>
+          <text class="ts" x="538" y="10" fill="var(--muted)">post-A3</text>
+        </g>
+        <g transform="translate(40,592)">
+          <line x1="0" y1="6" x2="22" y2="6" class="arr"></line>
+          <text class="ts" x="28" y="10" fill="var(--muted)">DP3 carries the heavier border — the headline contribution</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="honest">
+      <div class="h">What &ldquo;proposed at A1B&rdquo; means</div>
+      <p>In A1B the DP1–DP4 framework appears as a <strong>single static linkage diagram in an appendix</strong> (excluded from the 1,500-word count) — not the interactive artefacts. So the two-state chips don't mean &ldquo;diagram vs build&rdquo;; they track <strong>research status</strong>: <em>A1B = committed / proposed; A3 = built / evidenced.</em> That proposed&nbsp;&rarr;&nbsp;delivered line is exactly what's on the table for approval.</p>
+    </div>
+
+    <div class="foot">
+      Kali Madden · BUS922 A3 · the map (sparse by design — the territory is the evidence landscape) · June 2026
+    </div>
+  </div>
+</body>
+</html>
