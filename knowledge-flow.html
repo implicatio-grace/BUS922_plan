@@ -113,6 +113,21 @@ a { color: inherit; }
 .section { padding: 96px 0; position: relative; }
 .section + .section { border-top: 1px solid var(--rule-soft); }
 
+/* Figure index rail */
+.fig-index { position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 45; display: flex; flex-direction: column; gap: 1px; padding: 12px 6px 12px 10px; font-family: var(--mono); border-radius: 0 8px 8px 0; transition: background .25s ease, box-shadow .25s ease; }
+.fig-index:hover { background: rgba(255,252,245,0.96); box-shadow: 3px 0 28px rgba(31,42,55,0.10); }
+.fig-index::before { content: ""; position: absolute; left: 15px; top: 18px; bottom: 18px; width: 1px; background: var(--rule); }
+.fig-index-item { position: relative; display: flex; align-items: center; background: none; border: none; cursor: pointer; padding: 7px 0; color: var(--ink-soft); transition: color .2s ease; }
+.fig-index-dot { position: relative; z-index: 1; flex: none; width: 9px; height: 9px; border-radius: 50%; border: 1.4px solid var(--ink-soft); background: var(--paper); transition: all .25s ease; }
+.fig-index-text { display: inline-flex; align-items: baseline; gap: 8px; white-space: nowrap; font-size: 10px; letter-spacing: 1.1px; text-transform: uppercase; max-width: 0; margin-left: 0; opacity: 0; overflow: hidden; transition: max-width .35s ease, margin-left .35s ease, opacity .25s ease; }
+.fig-index-num { font-size: 8.5px; opacity: 0.55; }
+.fig-index:hover .fig-index-text { max-width: 240px; margin-left: 11px; opacity: 1; }
+.fig-index-item:hover { color: var(--ink); }
+.fig-index-item:hover .fig-index-dot { border-color: var(--marine); }
+.fig-index-item.active { color: var(--ink); }
+.fig-index-item.active .fig-index-dot { border-color: var(--marine); background: var(--marine); box-shadow: 0 0 0 3px rgba(19,58,92,0.13); }
+@media (max-width: 1080px) { .fig-index { display: none; } }
+
 /* Crosshair / compass corner ornaments */
 .frame-cross {
   position: absolute;
@@ -942,14 +957,16 @@ function Station({ x, y, n, label, sublabel, secLabel, authority, selected, onCl
         {n}
       </text>
       {/* Layer label (above) */}
-      <text textAnchor="middle" y="-54" fontFamily="var(--mono)" fontSize="10" letterSpacing="2.4" fill="var(--ink-soft)">
+      <text textAnchor="middle" y={authority ? "-66" : "-54"} fontFamily="var(--mono)" fontSize="10" letterSpacing="2.4" fill="var(--ink-soft)">
         LAYER {n}
       </text>
-      {/* v2.0 — andragogy badge on L1 as design authority. Drawn between
-          the LAYER label and the disk top so the disk numeral stays legible. */}
+      {/* v2.0 — andragogy badge on L1 as design authority. Stacked over two
+          lines so its tail stays clear of the manifest indicator on the
+          L1 → L2 lane; LAYER label lifts to make vertical room. */}
       {authority && (
-        <text textAnchor="middle" y="-40" fontFamily="var(--display)" fontStyle="italic" fontSize="11.5" fill={color} opacity="0.95">
-          ◊ {authority}
+        <text textAnchor="middle" fontFamily="var(--display)" fontStyle="italic" fontSize="11.5" fill={color} opacity="0.95">
+          <tspan x="0" y="-50">◊ {authority.split("·")[0].trim()}</tspan>
+          <tspan x="0" y="-37">{(authority.split("·")[1] || "").trim()}</tspan>
         </text>
       )}
       {/* Plain label (below) */}
@@ -976,14 +993,14 @@ function Station({ x, y, n, label, sublabel, secLabel, authority, selected, onCl
 function EndCap({ x, y, label, sublabel, side = "left", color = "var(--copper)" }) {
   return (
     <g transform={`translate(${x},${y})`}>
-      <rect x="-30" y="-22" width="60" height="44" fill="none" stroke={color} strokeWidth="1" strokeOpacity="0.6" strokeDasharray="2 3" />
       <text textAnchor="middle" y="-32" fontFamily="var(--mono)" fontSize="9.5" letterSpacing="1.8" fill="var(--ink-soft)">
         {side === "left" ? "ARRIVAL" : "IMPACT"}
       </text>
-      <text textAnchor="middle" y="3" fontFamily="var(--display)" fontSize="14" fill="var(--ink)">
+      <rect x="-70" y="-12" width="140" height="42" fill="none" stroke={color} strokeWidth="1" strokeOpacity="0.6" strokeDasharray="2 3" />
+      <text textAnchor="middle" y="6" fontFamily="var(--display)" fontSize="14" fill="var(--ink)">
         {label}
       </text>
-      <text textAnchor="middle" y="20" fontFamily="var(--body)" fontSize="11" fill="var(--ink-soft)">
+      <text textAnchor="middle" y="23" fontFamily="var(--body)" fontSize="11" fill="var(--ink-soft)">
         {sublabel}
       </text>
     </g>
@@ -1063,7 +1080,7 @@ function HeroFlow({ selected, setSelected, overlays, playing, cycle }) {
 
   // Acquisition vessels (left edge, indexed by cycle)
   const vessels = Array.from({ length: 5 }, (_, i) => ({
-    x: 40 + i * 14,
+    x: 58 + i * 14,
     y: 460 + (i % 2) * 6,
     active: i < cycle,
   }));
@@ -1169,17 +1186,17 @@ function HeroFlow({ selected, setSelected, overlays, playing, cycle }) {
       {/* SECI mode labels along the lane — always-on annotations of the spine.
           The per-station SECI overlay still controls the fuller per-port boxes. */}
       <g fontFamily="var(--mono)" fontSize="9" letterSpacing="1.6" fill="var(--marine)" textAnchor="middle" opacity="0.75">
-        <text x={(ARRIVAL[0] + L1[0]) / 2} y="354">→ EXTERNALISATION →</text>
-        <text x={(L1[0] + L2[0]) / 2}     y="354">→ COMBINATION →</text>
-        <text x={(L2[0] + L3[0]) / 2}     y="354" fill="var(--copper)">→ INTERNALISATION · SOCIALISATION →</text>
-        <text x={(L3[0] + IMPACT[0]) / 2} y="354" fill="var(--copper)" opacity="0.55">→ re-tacit → next cycle</text>
+        <text x={(ARRIVAL[0] + L1[0]) / 2} y="372">→ EXTERNALISATION →</text>
+        <text x={(L1[0] + L2[0]) / 2}     y="372">→ COMBINATION →</text>
+        <text x={(L2[0] + L3[0]) / 2}     y="372" fill="var(--copper)">→ INTERNALISATION · SOCIALISATION →</text>
+        <text x={(L3[0] + IMPACT[0]) / 2 + 28} y="372" fill="var(--copper)" opacity="0.55">→ re-tacit → next cycle</text>
       </g>
 
       {/* Quadruple-duty metadata indicator on the lane between L1 → L2.
           v2.0: fourth bar added — acquisition-cohort metadata is the data
-          foundation for double-loop reflection (v5 §6.2). */}
-      <g transform={`translate(${(L1[0] + L2[0]) / 2 - 84}, ${(L1[1] + L2[1]) / 2 - 70})`}>
-        <rect width="168" height="30" rx="3" fill="rgba(255,252,245,0.85)" stroke="var(--ink)" strokeOpacity="0.5" />
+          foundation for double-loop reflection (v6 §6.2). */}
+      <g transform={`translate(${(L1[0] + L2[0]) / 2 - 122}, ${(L1[1] + L2[1]) / 2 - 70})`}>
+        <rect width="244" height="30" rx="3" fill="rgba(255,252,245,0.85)" stroke="var(--ink)" strokeOpacity="0.5" />
         <text x="8" y="13" fontFamily="var(--mono)" fontSize="9" letterSpacing="1.2" fill="var(--ink-soft)">
           MANIFEST · QUADRUPLE-DUTY METADATA
         </text>
@@ -1260,7 +1277,6 @@ function HeroFlow({ selected, setSelected, overlays, playing, cycle }) {
 
       {/* Caption strip beneath lane — flow legend */}
       <g fontFamily="var(--mono)" fontSize="10" fill="var(--ink-soft)" letterSpacing="1.4">
-        <text x={ARRIVAL[0]} y={H - 60} textAnchor="middle">TACIT</text>
         <text x={L1[0]} y={H - 60} textAnchor="middle">→ STRUCTURED ARTEFACT</text>
         <text x={L2[0]} y={H - 60} textAnchor="middle">→ VISIBLE · CLUSTERED</text>
         <text x={L3[0]} y={H - 60} textAnchor="middle">→ HOW MIGHT WE</text>
@@ -1525,7 +1541,7 @@ function TripleDuty({ register }) {
 }
 
 // ───────────────────────── REFLECTION ARCHITECTURE (v2.0) ─────────────────────────
-// v5 §6.2 two-level reflection:
+// v6 §6.2 two-level reflection:
 //   single-loop at each station (platform-embedded operational improvement)
 //   double-loop across cohorts (data-enriched via cohort metadata)
 // This is the marquee structural addition for v2.0 — genuinely new visual real estate.
@@ -1537,7 +1553,7 @@ function ReflectionArchitecture({ register }) {
       owner: "PD Manager",
       ring: ["user suggests", "manager iterates", "retroactive alert"],
       plain: "Each PD activity has a 'suggest a change' link. New users notice things the spec missed; specs evolve; prior submitters get a heads-up to update their artefacts to the revised spec.",
-      academic: "Andragogically-grounded single-loop: learners' tacit critique surfaces design limitations in the artefact spec; updates propagate via alert routing to prior submitters, keeping the artefact population current as specifications mature (v5 §6.2; Knowles, 1984).",
+      academic: "Andragogically-grounded single-loop: learners' tacit critique surfaces design limitations in the artefact spec; updates propagate via alert routing to prior submitters, keeping the artefact population current as specifications mature (v6 §6.2; Knowles, 1984).",
       color: "var(--marine)",
     },
     {
@@ -1546,7 +1562,7 @@ function ReflectionArchitecture({ register }) {
       owner: "PD Manager + leadership + broad-role players",
       ring: ["pattern seen", "rule drafted", "rule versioned"],
       plain: "The rules that group artefacts into clusters aren't fixed configuration — they're a living, version-controlled library, viewable across the org with its own 'submit insight' link.",
-      academic: "Knowledge-architecture single-loop: rule revision IS the act of getting better at recognising what matters in the accumulating artefact corpus. Owned by roles with cross-functional reach so rules can see across business boundaries (v5 §8.1).",
+      academic: "Knowledge-architecture single-loop: rule revision IS the act of getting better at recognising what matters in the accumulating artefact corpus. Owned by roles with cross-functional reach so rules can see across business boundaries (v6 §8.1).",
       color: "var(--copper)",
     },
     {
@@ -1918,7 +1934,7 @@ function AcquisitionSlider({ cycle, setCycle }) {
         ))}
       </div>
 
-      {/* v2.0 — compounding-time / competitive-advantage framing per v5 §8.2.
+      {/* v2.0 — compounding-time / competitive-advantage framing per v6 §8.2.
           Each layer-specific single-loop + the cross-cutting double-loop all
           accumulate over cycles, producing organisational self-knowledge that is
           path-dependent and hard to replicate. */}
@@ -1928,7 +1944,7 @@ function AcquisitionSlider({ cycle, setCycle }) {
         <span className="chip"><span className="dot" style={{ background: "var(--copper)" }}></span>hard to replicate</span>
         <span className="chip"><span className="dot" style={{ background: "var(--signal)" }}></span>cannot be purchased or shortcut</span>
         <div className="small muted" style={{ flex: "1 1 220px", minWidth: 220 }}>
-          Artefact specs, cluster rules, innovation-pipeline sophistication, and cohort-level integration intelligence all accumulate. Time is a compounding factor, not just a dimension — and the longer the system runs, the harder it is for anyone else to catch up. <span className="mono tiny muted">(v5 §8.2)</span>
+          Artefact specs, cluster rules, innovation-pipeline sophistication, and cohort-level integration intelligence all accumulate. Time is a compounding factor, not just a dimension — and the longer the system runs, the harder it is for anyone else to catch up. <span className="mono tiny muted">(v6 §8.2)</span>
         </div>
       </div>
     </div>
@@ -1990,7 +2006,7 @@ function Flywheel() {
     return () => clearInterval(id);
   }, []);
 
-  const cx = 130, cy = 130, r = 86;
+  const cx = 150, cy = 150, r = 100;
   return (
     <div className="card" style={{ padding: 28 }}>
       <div className="corner tl"></div><div className="corner tr"></div>
@@ -2001,9 +2017,9 @@ function Flywheel() {
         The framework-level cycle builds capacity across acquisition cycles. The innovation-level cycle builds innovation capability within each cycle. The system has two flywheels turning at different scales.
       </p>
 
-      <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 28, marginTop: 16, alignItems: "center" }}>
-        <svg viewBox="0 0 260 260" width="260" height="260">
-          <circle cx={cx} cy={cy} r={r + 18} fill="none" stroke="var(--rule)" strokeWidth="0.8" strokeDasharray="2 4" />
+      <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 28, marginTop: 16, alignItems: "center" }}>
+        <svg viewBox="0 0 300 300" width="300" height="300">
+          <circle cx={cx} cy={cy} r={r + 40} fill="none" stroke="var(--rule)" strokeWidth="0.8" strokeDasharray="2 4" />
           <circle cx={cx} cy={cy} r={r} fill="none" stroke="var(--ink)" strokeWidth="0.9" />
           {stages.map((s, i) => {
             const angle = (i / 4) * Math.PI * 2 - Math.PI / 2;
@@ -2012,15 +2028,15 @@ function Flywheel() {
             const active = i === stage;
             return (
               <g key={s.key} onMouseEnter={() => setStage(i)}>
-                <circle cx={x} cy={y} r={active ? 22 : 16} fill={active ? s.color : "var(--paper)"} stroke={s.color} strokeWidth={active ? 0 : 1.2} />
-                <text x={x} y={y + 4} textAnchor="middle" fontFamily="var(--mono)" fontSize="10" fill={active ? "var(--paper)" : "var(--ink)"} letterSpacing="1.4">
+                <circle cx={x} cy={y} r={active ? 36 : 31} fill={active ? s.color : "var(--paper)"} stroke={s.color} strokeWidth={active ? 0 : 1.2} />
+                <text x={x} y={y + 4} textAnchor="middle" fontFamily="var(--mono)" fontSize="10" fill={active ? "var(--paper)" : "var(--ink)"} letterSpacing="1.2">
                   {s.key.toUpperCase()}
                 </text>
               </g>
             );
           })}
-          {/* arrow on circle */}
-          <path d={`M ${cx + r} ${cy - 6} l 10 6 l -10 6 z`} fill="var(--ink)" />
+          {/* direction arrow on the ring, in the gap between Collect and Engage */}
+          <path d="M -5 -4 L 5 0 L -5 4 Z" fill="var(--ink)" transform={`translate(${cx + Math.cos(-Math.PI / 4) * r}, ${cy + Math.sin(-Math.PI / 4) * r}) rotate(45)`} />
         </svg>
         <div className="col gap-8">
           <div className="eyebrow" style={{ color: stages[stage].color }}>{stages[stage].key.toUpperCase()}</div>
@@ -2058,6 +2074,59 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "playing": true
 }/*EDITMODE-END*/;
 
+// Fixed left-edge index of the figures on the canvas; highlights the figure
+// nearest the viewport centre and scrolls to any on click.
+function FigureIndex() {
+  const figs = [
+    { id: "fig-flow", label: "Knowledge flow" },
+    { id: "fig-cohorts", label: "Acquisition cohorts" },
+    { id: "fig-reflection", label: "Reflection architecture" },
+    { id: "fig-metadata", label: "Quadruple-duty metadata" },
+    { id: "fig-outcomes", label: "Four outcomes" },
+    { id: "fig-pipeline", label: "Automation pipeline" },
+    { id: "fig-flywheel", label: "Nested flywheel" },
+    { id: "fig-architecture", label: "Framework architecture" },
+  ];
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    const secs = figs.map((f) => document.getElementById(f.id));
+    if (!secs.some(Boolean)) return;
+    const onScroll = () => {
+      const mid = window.innerHeight / 2;
+      let best = 0, bestD = Infinity;
+      secs.forEach((s, i) => {
+        if (!s) return;
+        const r = s.getBoundingClientRect();
+        const d = Math.abs(r.top + r.height / 2 - mid);
+        if (d < bestD) { bestD = d; best = i; }
+      });
+      setActive(best);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+  const go = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 72, behavior: "smooth" });
+  };
+  return (
+    <nav className="fig-index" aria-label="Figure index">
+      {figs.map((f, i) => (
+        <button key={f.id} className={`fig-index-item ${i === active ? "active" : ""}`} onClick={() => go(f.id)} title={f.label}>
+          <span className="fig-index-dot"></span>
+          <span className="fig-index-text"><span className="fig-index-num">{String(i + 1).padStart(2, "0")}</span>{f.label}</span>
+        </button>
+      ))}
+    </nav>
+  );
+}
+
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [selected, setSelected] = useState(null);
@@ -2076,6 +2145,7 @@ function App() {
 
   return (
     <div className="chart-paper" style={{ minHeight: "100vh" }}>
+      <FigureIndex />
       {/* Header */}
       <header className="shell section" style={{ paddingTop: 56, paddingBottom: 48, position: "relative" }}>
         <span className="frame-cross" style={{ top: 24, left: 24 }}></span>
@@ -2116,7 +2186,7 @@ function App() {
       </header>
 
       {/* HERO FLOW */}
-      <section className="shell" style={{ paddingBottom: 24 }}>
+      <section id="fig-flow" className="shell" style={{ paddingBottom: 24 }}>
         <div className="flex between center wrap gap-16" style={{ marginBottom: 12 }}>
           <span className="eyebrow">Knowledge flow — three platforms, one shipping lane</span>
           <div className="flex center gap-12">
@@ -2162,37 +2232,37 @@ function App() {
       </section>
 
       {/* Acquisition cycles / baseline */}
-      <section className="shell" style={{ paddingTop: 56, paddingBottom: 32 }}>
+      <section id="fig-cohorts" className="shell" style={{ paddingTop: 56, paddingBottom: 32 }}>
         <AcquisitionSlider cycle={cycle} setCycle={setCycle} />
       </section>
 
       {/* REFLECTION ARCHITECTURE (v2.0 — marquee structural addition) */}
-      <section className="shell section">
+      <section id="fig-reflection" className="shell section">
         <ReflectionArchitecture register={t.register} />
       </section>
 
       {/* QUADRUPLE-DUTY METADATA (v2.0 — fourth duty: cohort metadata for double-loop) */}
-      <section className="shell section">
+      <section id="fig-metadata" className="shell section">
         <TripleDuty register={t.register} />
       </section>
 
       {/* FOUR OUTCOMES */}
-      <section className="shell section">
+      <section id="fig-outcomes" className="shell section">
         <FourOutcomes register={t.register} />
       </section>
 
       {/* AUTOMATION PIPELINE */}
-      <section className="shell section">
+      <section id="fig-pipeline" className="shell section">
         <AutomationPipeline register={t.register} />
       </section>
 
       {/* NESTED FLYWHEEL */}
-      <section className="shell section">
+      <section id="fig-flywheel" className="shell section">
         <Flywheel />
       </section>
 
       {/* INTEGRATED PROPOSITION */}
-      <section className="shell section">
+      <section id="fig-architecture" className="shell section">
         <div className="flex between wrap gap-32">
           <div style={{ flex: "1 1 360px", maxWidth: 480 }}>
             <div className="eyebrow">Integrated proposition</div>
@@ -2215,7 +2285,7 @@ function App() {
               One integrating theory, three layer cores, one bridge, one lens.
             </h3>
             <p className="small muted" style={{ marginTop: 8 }}>
-              v5's structural promotion, carried into v6: SECI carries the spine; layer-specific theories govern within each layer; absorptive capacity bridges M&amp;A ↔ KM without occupying a core slot; Maynard's transition framework rides alongside as a supplementary analytical lens. v6 elevates &ldquo;contribution is the mechanism of belonging&rdquo; to a named design principle.
+              v5's structural promotion, carried into v6: SECI carries the spine; layer-specific theories govern within each layer; absorptive capacity bridges M&amp;A ↔ KM without occupying a core slot; Maynard's transition framework rides alongside as a supplementary analytical lens. v6 elevates &ldquo;contribution is the mechanism of belonging&rdquo; to a named cross-cutting design principle.
             </p>
             <ul style={{ margin: "16px 0 0", padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
               {[

@@ -90,10 +90,34 @@
   .oos .txt{font-size:12.5px;color:var(--muted);line-height:1.55;flex:1;min-width:280px;}
   .oos .txt b{color:var(--ink-2);}
 
+  /* DP5 / DP6 — landscape-informing detail (held here so it stays fixed as the evidence landscape grows) */
+  .oos-head{margin:30px 0 0;display:flex;gap:14px 22px;align-items:baseline;flex-wrap:wrap;}
+  .oos-head .lab{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.1em;
+    text-transform:uppercase;color:var(--muted-2);white-space:nowrap;}
+  .oos-head .note{font-size:12.5px;color:var(--muted);line-height:1.6;flex:1;min-width:300px;}
+  .oos-head .note b{color:var(--ink-2);font-weight:500;}
+  .oosgrid{margin:14px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .oosdp{border:1px dashed var(--line-2);border-radius:12px;padding:18px 20px 17px;
+    background:repeating-linear-gradient(135deg,transparent,transparent 9px,rgba(0,0,0,0.015) 9px,rgba(0,0,0,0.015) 18px);}
+  .oosdp .dp{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--muted-2);font-weight:500;}
+  .oosdp h3{font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:17px;line-height:1.2;
+    margin:9px 0 0;color:var(--ink-2);}
+  .oosdp .prin{font-size:12.5px;line-height:1.55;color:var(--ink-2);margin:10px 0 0;}
+  .oosdp .prin em{font-style:italic;color:var(--ink);}
+  .oosdp .app,.oosdp .why{font-size:11.5px;line-height:1.5;color:var(--muted);
+    margin:12px 0 0;padding-top:10px;border-top:1px solid var(--line);}
+  .oosdp .app b,.oosdp .why b{font-family:"JetBrains Mono",monospace;font-size:8.5px;
+    letter-spacing:0.1em;text-transform:uppercase;color:var(--muted-2);display:block;
+    margin-bottom:3px;font-weight:500;}
+  .oosdp .app em,.oosdp .why em{font-style:italic;}
+  .oosdp .cites{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--muted);
+    margin:11px 0 0;padding-top:10px;border-top:1px solid var(--line);line-height:1.55;letter-spacing:0.01em;}
+
   .foot{margin-top:42px;font-family:"JetBrains Mono",monospace;font-size:10.5px;
     text-transform:uppercase;letter-spacing:0.1em;color:var(--muted-2);line-height:1.9;}
 
-  @media (max-width:880px){.pipe{grid-template-columns:1fr 1fr;} .flowarrow{display:none;}}
+  @media (max-width:880px){.pipe{grid-template-columns:1fr 1fr;} .oosgrid{grid-template-columns:1fr;} .flowarrow{display:none;}}
   @media (max-width:520px){.pipe{grid-template-columns:1fr;}}
   @media print{html,body{background:#fff;} .stage,.oos,.source{break-inside:avoid;} .back{display:none;}}
 </style>
@@ -125,7 +149,7 @@
         <div class="dpnum">DP2 · generation</div>
         <h3>Generative articulation</h3>
         <p class="mech">The learner produces a short, prompted explicit account of the problem. Self-explanation drives the learning (g&nbsp;=&nbsp;.55); generation is simultaneously the learning <em>and</em> the externalised artefact.</p>
-        <div class="forp"><b>For the partner</b>Captures tacit operational know-how with no dedicated L&amp;D function to elicit it.</div>
+        <div class="forp"><b>For the partner</b>Captures tacit operational know-how.</div>
         <div class="src">Bisra et&nbsp;al. 2018 · Fiorella &amp; Mayer 2016 · Schön 1987</div>
         <span class="flowarrow">&rarr;</span>
       </div>
@@ -165,9 +189,27 @@
       </div>
     </div>
 
-    <div class="oos">
-      <span class="lab">Out of scope · post-A3</span>
-      <span class="txt"><b>DP5 — learner-controlled disclosure (trust)</b> and <b>DP6 — multiple means of expression</b> sit just past the boundary of this slice. They're shown on the evidence landscape as informing-not-formal direction, replicating the EDGI902 precedent — so the fuller intent is visible without being part of the formal work.</span>
+    <div class="oos-head">
+      <span class="lab">Out of scope · post-A3 · landscape-informing</span>
+      <span class="note">DP5 and DP6 sit just past the boundary of the bounded act. The <b>full principle detail lives here</b> so it stays fixed &mdash; the evidence landscape plots the supporting papers, which grow over time. Informing-not-formal direction, per the EDGI902 precedent.</span>
+    </div>
+    <div class="oosgrid">
+      <div class="oosdp">
+        <div class="dp">DP5 · post-A3 · landscape-informing</div>
+        <h3>Learner-controlled disclosure as a trust mechanism</h3>
+        <p class="prin">Reflect-for-self first, then select-for-sharing &mdash; the learner controls what becomes visible. Disclosure is treated as a protective <em>and</em> generative act, not an automatic publish.</p>
+        <p class="app"><b>For the partner</b>Safe contribution is how newly-acquired, cross-cultural staff build early belonging &mdash; the partner's culture-brief bullet.</p>
+        <p class="why"><b>Why deferred</b>Trust and disclosure open their own evidentiary stream. The formal slice stops at <em>capture</em>, before the sharing decision &mdash; so DP5 informs the direction without widening the bounded act.</p>
+        <p class="cites">Connelly et&nbsp;al. 2011 &middot; Petronio 2010 &middot; Frazier et&nbsp;al. 2017</p>
+      </div>
+      <div class="oosdp">
+        <div class="dp">DP6 · post-A3 · landscape-informing</div>
+        <h3>Multiple means of expression, no single channel privileged</h3>
+        <p class="prin">Let learners articulate in their strongest mode &mdash; text, voice, diagram. UDL is the equity frame; generative learning is the effect.</p>
+        <p class="app"><b>For the partner</b>Lets the most tacit operational know-how surface in non-text form, where prose would lose it.</p>
+        <p class="why"><b>Why deferred</b>Modality multiplies the artefact and template design. The slice deliberately fixes one channel to isolate the generative mechanism (DP2&ndash;DP3); DP6 shows where it widens afterwards.</p>
+        <p class="cites">King-Sears et&nbsp;al. 2023 &middot; Epstein et&nbsp;al. 2020 &middot; Zhang 2024 / Capp 2017</p>
+      </div>
     </div>
 
     <div class="foot">
